@@ -9,16 +9,6 @@
       "createdAt": "2026-09-05",
       "vercelProject": "labs-study-buddy",
       "url": "https://labs-study-buddy.vercel.app"
-    },
-    {
-      "name": "tmp-verify",
-      "title": "검증용",
-      "description": "배포 스크립트 검증",
-      "themeColor": "#16a34a",
-      "dir": "apps/tmp-verify",
-      "createdAt": "2026-09-05",
-      "vercelProject": null,
-      "url": null
     }
   ]
 }

@@ -11,6 +11,7 @@
 import { execFileSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
+import os from "node:os";
 import { fileURLToPath } from "node:url";
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
@@ -86,11 +87,25 @@ const vercel = (args, opts = {}) =>
   });
 
 /** vercel api 응답에서 JSON 만 뽑는다 (CLI 가 배너를 함께 출력한다) */
-const api = (args) => {
-  const out = vercel(["api", ...args, "--raw"]);
-  const m = out.match(/[[{][\s\S]*[\]}]/);
-  if (!m) throw new Error(`API 응답에서 JSON 을 찾지 못했습니다:\n${out.slice(0, 300)}`);
-  return JSON.parse(m[0]);
+const api = (args, body) => {
+  let extra = [];
+  let tmp;
+  if (body) {
+    // 중첩 객체는 -f 플래그로 못 보낸다. 임시 파일로 넘긴다.
+    tmp = path.join(os.tmpdir(), `labs-deploy-${Date.now()}.json`);
+    fs.writeFileSync(tmp, JSON.stringify(body));
+    extra = ["--input", tmp];
+  }
+  try {
+    const out = vercel(["api", ...args, ...extra, "--raw"]);
+    const m = out.match(/[[{][\s\S]*[\]}]/);
+    if (!m) throw new Error(`API 응답에서 JSON 을 찾지 못했습니다:\n${out.slice(0, 300)}`);
+    const j = JSON.parse(m[0]);
+    if (j.error) throw new Error(`Vercel API 오류: ${j.error.code} ${j.error.message ?? ""}`);
+    return j;
+  } finally {
+    if (tmp) fs.rmSync(tmp, { force: true });
+  }
 };
 
 // ── 1. 로그인 확인 ───────────────────────────────────────────
@@ -160,15 +175,22 @@ if (project.link) {
 // ── 6. 배포 ──────────────────────────────────────────────────
 let url = entry.url;
 if (doDeploy) {
-  step(6, "프로덕션 배포");
-  vercel(["deploy", "--prod", "--yes", "--cwd", appDir], { inherit: true });
-  try {
-    const [latest] = api([`/v6/deployments?projectId=${project.id}&limit=1&target=production`])
-      .deployments ?? [];
-    if (latest?.url) url = `https://${latest.url}`;
-  } catch {
-    /* URL 조회 실패는 치명적이지 않다 */
-  }
+  step(6, "프로덕션 배포 (git 기반)");
+  // CLI 의 `vercel deploy --cwd apps/<name>` 은 모노레포에서 쓸 수 없다.
+  // 그 디렉터리를 통째로 업로드하는데 프로젝트의 rootDirectory 가 업로드된 것
+  // "안에서" 다시 apps/<name> 을 찾기 때문이다. (DECISIONS D18)
+  // git push 와 동일한 경로가 되도록 API 로 배포를 트리거한다.
+  if (!project.link) fail("git 연동이 없어 배포할 수 없습니다.");
+  const ref = project.link.productionBranch ?? "main";
+  info(`${project.link.org}/${project.link.repo} @ ${ref} 로 배포합니다`);
+  const dep = api(["-X", "POST", "/v13/deployments"], {
+    name: projectName,
+    project: project.id,
+    target: "production",
+    gitSource: { type: project.link.type, repoId: project.link.repoId, ref },
+  });
+  ok(`배포 시작: ${dep.url} (${dep.readyState ?? dep.status})`);
+  info(`진행 상황: pnpm exec vercel inspect ${dep.id}`);
 } else {
   step(6, "배포");
   info("--prod 가 없으므로 배포하지 않습니다. git push 하면 자동 배포됩니다.");

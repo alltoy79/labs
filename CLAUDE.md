@@ -18,13 +18,14 @@
 
 ## 공장 구성 요소
 
-| 구성 | 위치 | 상태 |
-|---|---|---|
-| 앱 생성기 | `tools/create-app` | — |
-| 배포 스크립트 | `tools/deploy` | — |
-| 앱 레지스트리 | `apps/registry.json` | — |
-| 공유 설정 | `packages/config` | 있음 |
-| 공유 도메인 패키지 | `packages/{ui,auth,db,push,llm}` | 앱 1호 검증 후 추출 |
+| 구성               | 위치                             | 상태                                 |
+| ------------------ | -------------------------------- | ------------------------------------ |
+| 앱 생성기          | `tools/create-app`               | ✅ `pnpm create-app <이름>`          |
+| 배포 스크립트      | `tools/deploy`                   | ✅ `pnpm deploy-app <이름> [--prod]` |
+| 아이콘 생성기      | `tools/icon-gen`                 | ✅ create-app 이 사용                |
+| 앱 레지스트리      | `apps/registry.json`             | ✅                                   |
+| 공유 설정          | `packages/config`                | 있음                                 |
+| 공유 도메인 패키지 | `packages/{ui,auth,db,push,llm}` | 앱 1호 검증 후 추출                  |
 
 ## 절대 규칙
 
@@ -148,6 +149,17 @@ tools/        개발용 CLI (배포되지 않음)
 
 `packages/` 안은 전부 공유 패키지이므로 하위 카테고리를 두지 않는다.
 프로젝트가 5개를 넘어가면 그때 카테고리를 재검토한다.
+
+## 새 앱 만들기
+
+```bash
+pnpm create-app <이름> --title "표시명" --desc "설명" --color "#4f46e5"
+git add -A && git commit -m "feat(<이름>): 앱 생성" && git push
+pnpm deploy-app <이름>          # Vercel 프로젝트 생성 + git 연동
+```
+
+이후 `main` 에 push 하면 자동 배포된다. 즉시 배포하려면 `pnpm deploy-app <이름> --prod`.
+**`vercel deploy --cwd` 는 모노레포에서 동작하지 않는다** (DECISIONS D18).
 
 ## 명령어
 

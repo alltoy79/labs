@@ -142,3 +142,33 @@ packageManager 제거, PWA 베이스라인)만 관리한다.
 **근거** 생성기·배포 스크립트는 타입 안전성보다 즉시 실행성과 단순함이 중요하다.
 TS 로 쓰면 빌드나 tsx 의존성이 생기고, 그 자체가 공장 유지비가 된다.
 `packages/*` 는 앱이 import 하므로 TS 를 쓴다.
+
+### D18. 모노레포에서는 `vercel deploy --cwd` 를 쓸 수 없다
+
+**증상** `vercel deploy --prod --cwd apps/<name>` 이
+`Error: The specified Root Directory "apps/<name>" does not exist` 로 실패한다.
+**원인** `--cwd` 는 그 디렉터리를 통째로 업로드하는데, 프로젝트 설정의 `rootDirectory` 가
+**업로드된 것 안에서 다시** `apps/<name>` 을 찾는다. 이중 중첩.
+**해결** git push 와 동일한 경로로 배포한다 — API 로 git 기반 배포를 트리거한다.
+
+```
+POST /v13/deployments
+{ name, project: <prj_id>, target: "production",
+  gitSource: { type: "github", repoId: <link.repoId>, ref: "main" } }
+```
+
+`repoId` 는 `GET /v9/projects/<name>` 의 `link.repoId` 에 있다.
+**실측** 임시 앱 `tmp-verify` 를 만들어 프로젝트 생성 → rootDirectory PATCH →
+git connect → 배포까지 전 경로를 돌리고 HTTP 200 및 배포 내용(`<title>검증용</title>`)까지 확인한 뒤 삭제.
+**교훈** 평소 배포는 `git push` 로 충분하다. `deploy-app --prod` 는 즉시 배포가 필요할 때만 쓴다.
+
+### D19. `tools/deploy` 는 멱등하다
+
+**결정** 이미 설정된 앱에 다시 돌려도 안전하게, 각 단계가 현재 상태를 확인하고
+필요할 때만 변경하도록 만들었다 (프로젝트 존재 / rootDirectory / 링크 / git 연동).
+**근거** 배포 설정은 가끔 건드리는 작업이라 "지금 상태가 어떤지" 확인용으로도 쓰게 된다.
+매번 새로 만들려 들면 쓸 수가 없다.
+**부수 확인** Vercel 인증은 `~/Library/Application Support/com.vercel.cli` 에 저장된다 —
+회사 환경과 무관. `.vercel/` 은 앱의 `.gitignore` 에 이미 포함되어 커밋되지 않는다.
+**Vercel 프로젝트 삭제** `vercel project remove` 는 `--yes` 를 받지 않는다.
+비대화식으로 지우려면 `vercel api -X DELETE /v9/projects/<name> --dangerously-skip-permissions`.
