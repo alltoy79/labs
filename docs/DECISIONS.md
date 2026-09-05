@@ -94,3 +94,19 @@
 **사실** `sysctl.proc_translated=1`, `uname -m` 이 `x86_64` 로 보고됨. 그래서 `nvm install 22` 가 x86_64 빌드를 받았다. 회사용 Node 20 은 arm64 네이티브다. Homebrew 도 `/usr/local`(x86).
 **판단** 지금은 고치지 않는다. 기능 문제가 아니라 속도만 손해이고(dev 기동 687ms, 전체 빌드 7.2초), nvm 상태를 건드리는 명령은 D7 사고 전례가 있어 위험 대비 이득이 맞지 않는다.
 **나중에 할 때** `arch -arm64` 로 Node 22 만 재설치하고, 전후로 회사 환경(특히 `~/.nvm/alias/default`)이 동일한지 검증한다. 터미널의 Rosetta 설정 자체는 건드리지 않는다 — 회사 도구가 의존할 수 있다.
+
+### D14. Vercel 배포 — 프로젝트명 `labs-study-buddy`
+
+**결정** Vercel Hobby(무료), 프로젝트명 `labs-study-buddy`, Root Directory `apps/study-buddy`.
+**근거·실측** Vercel 이 Turborepo 를 자동 인식해 Root Directory 를 `apps/study-buddy` 로 잡아줬다(수동 설정 불필요).
+프로젝트명을 `study-buddy` 로 줄이지 않은 이유 — **`study-buddy.vercel.app` 은 이미 다른 사람이 쓰고 있다**
+(HTTP 200, title "Study Buddy"). Vercel 기본 도메인은 전역 네임스페이스라 선점되면 못 쓴다.
+**배포 URL** https://labs-study-buddy.vercel.app (HTTP 200 확인)
+**GitHub App 권한** `Only select repositories` → `labs` 만 허용. 다른 레포는 Vercel 이 볼 수 없다.
+**남은 것** 앱 메타데이터가 아직 create-next-app 기본값(`<title>Create Next App</title>`)이다. PWA 설정 때 함께 고친다.
+
+### 모노레포 배포 구조 (앞으로 앱을 추가할 때)
+
+레포는 하나지만 **앱마다 Vercel 프로젝트를 따로 만든다.** 각 프로젝트의 Root Directory 를
+`apps/<앱이름>` 으로 지정하면 도메인·환경변수·배포가 앱별로 독립된다.
+커밋 하나가 여러 프로젝트 빌드를 트리거하는 게 신경 쓰이면 그때 `turbo-ignore` 를 붙인다.
