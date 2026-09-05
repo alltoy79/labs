@@ -1,0 +1,5 @@
+{
+  "extends": "@labs/config/tsconfig/node-lib.json",
+  "compilerOptions": { "outDir": "dist", "rootDir": "src" },
+  "include": ["src/**/*"]
+}

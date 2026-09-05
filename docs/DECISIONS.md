@@ -172,3 +172,54 @@ git connect → 배포까지 전 경로를 돌리고 HTTP 200 및 배포 내용(
 회사 환경과 무관. `.vercel/` 은 앱의 `.gitignore` 에 이미 포함되어 커밋되지 않는다.
 **Vercel 프로젝트 삭제** `vercel project remove` 는 `--yes` 를 받지 않는다.
 비대화식으로 지우려면 `vercel api -X DELETE /v9/projects/<name> --dangerously-skip-permissions`.
+
+## 문제 스키마 (2026-09-06)
+
+### D20. 스키마는 `packages/quiz-engine` 에 둔다
+
+**결정** 앱보다 먼저 공유 패키지로 뺐다. "앱 1호 검증 전에 추상화하지 않는다" 원칙의 예외다.
+**근거** `tools/quiz-gen`(생성)과 `apps/study-buddy`(사용)가 **오늘 둘 다 필요로 한다.**
+추측이 아니라 실재하는 두 소비자가 있으므로 조기 추상화가 아니다.
+단 지금은 **타입·검증만** 넣고 간격반복(SRS) 같은 도메인 로직은 실제 사용 패턴을 본 뒤 넣는다.
+
+### D21. 스키마를 세 겹으로 나눈다
+
+| 겹                        | 무엇                 | 왜                                                                                         |
+| ------------------------- | -------------------- | ------------------------------------------------------------------------------------------ |
+| `choiceDraftSchema`       | LLM 이 생성하는 부분 | id·검수상태·생성이력을 LLM 이 지어내면 안 된다. 순수 구조라 `z.toJSONSchema()` 로 변환된다 |
+| `authoredQuestionSchema`  | 저장·검수하는 전체   | Draft + 식별자 + 검수 메타 + 생성 이력                                                     |
+| `publishedQuestionSchema` | 앱 런타임 부분집합   | 검수 메타를 앱 번들에 실어보내지 않는다                                                    |
+
+**교차 필드 규칙은 zod refine 이 아니라 `validate.ts` 에 둔다.** refine 은 JSON Schema 로
+변환되지 않아 LLM 스키마를 오염시킨다.
+
+### D22. zod 4 를 쓴다
+
+**근거** `z.toJSONSchema()` 가 내장이라 **한 정의에서 런타임 검증과 LLM 구조화 출력 스키마를
+동시에** 얻는다. `z.strictObject()` 가 `additionalProperties: false` 를 내는데, 이는 Anthropic
+구조화 출력이 요구하는 형태다. 실측으로 확인함.
+
+### D23. 학년·과목 표현
+
+**학년** `e4 e5 e6 m1 m2 m3` — 짧고, 정렬 가능하고(`gradeOrder` 초4=4…중3=9), 학교급이 접두사로 드러난다.
+**과목** `korean social history science`. **역사는 중학교부터만 허용**한다 — 초등에는 별도 역사
+과목이 없고 사회에 포함된다. `subjectsFor(grade)` 와 자동 검증 규칙 `subject-allowed-for-grade` 로 강제한다.
+영어·수학은 타입에 아예 없다.
+**문제 id** `<학년>-<과목약어>-<4자리>` (예: `e6-sci-0001`). 사람이 읽을 수 있고 정렬되며,
+자동 검증이 id 와 grade/subject 의 불일치를 잡는다.
+
+### D24. 자동 검증 규칙 7개
+
+사람이 수천 문제를 다 볼 수 없으므로 기계가 확실히 잡을 수 있는 것을 먼저 거른다.
+
+`id-matches-grade-subject` / `subject-allowed-for-grade` / `choices-unique` /
+`answer-not-longest`(정답만 유독 길면 내용을 몰라도 맞힌다) / `no-banned-choice`("위 모두" 류) /
+`stem-no-answer-leak`(지문에 정답 노출) / `explanation-mentions-answer`(다른 문제의 해설이 붙는 것을 잡는다)
+
+`ALL_RULE_NAMES` 와 문제의 `review.autoChecks` 를 비교하면 **규칙을 추가했을 때 재검증 대상을
+식별**할 수 있다. 규칙마다 실패 케이스 테스트가 있다 (총 21개, 전부 통과).
+
+### D25. `node --test` 에 디렉터리를 주면 안 된다
+
+`node --test dist/__tests__/` 는 그 안의 `.d.ts` 등까지 실행하려다 실패한다.
+`node --test "dist/**/*.test.js"` 처럼 파일 패턴을 명시한다.

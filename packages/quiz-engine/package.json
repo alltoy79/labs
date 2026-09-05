@@ -1,0 +1,28 @@
+{
+  "name": "@labs/quiz-engine",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "문제 스키마와 검증. 생성기(tools/quiz-gen)와 앱이 함께 쓴다.",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "test": "node --test \"dist/**/*.test.js\""
+  },
+  "dependencies": {
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@labs/config": "workspace:*",
+    "@types/node": "catalog:",
+    "typescript": "catalog:"
+  }
+}
