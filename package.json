@@ -1,6 +1,7 @@
 {
   "name": "labs",
   "private": true,
+  "packageManager": "pnpm@11.25.0",
   "engines": {
     "node": ">=22"
   },
@@ -16,6 +17,6 @@
   "devDependencies": {
     "prettier": "^3.9.6",
     "turbo": "^2.10.12",
-    "typescript": "^7.0.2"
+    "typescript": "catalog:"
   }
 }

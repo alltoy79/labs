@@ -6,5 +6,14 @@ packages:
 # 공통 의존성 버전을 한 곳에서 관리.
 # 각 패키지에서는 "typescript": "catalog:" 처럼 참조한다.
 catalog:
-  typescript: ^7.0.2
+  # TypeScript 7(네이티브 컴파일러)은 typescript-eslint 8.x 가 아직 미지원(>=4.8.4 <6.1.0).
+  # next build / tsc 는 통과하지만 eslint 가 완전히 실패하므로 5.x 유지.
+  # 생태계가 따라오면 이 줄만 ^7 로 올리면 된다.
+  typescript: ^5.9.3
   "@types/node": ^22.18.1
+
+# create-next-app 이 apps/study-buddy 에 만든 설정을 루트로 이관.
+# 워크스페이스 설정은 루트에만 존재해야 한다.
+allowBuilds:
+  sharp: false
+  unrs-resolver: false

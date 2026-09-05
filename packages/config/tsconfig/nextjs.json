@@ -1,17 +1,26 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
   "_comment": [
-    "apps/*/* (Next.js) 용. 빌드는 Next가 담당하므로 noEmit.",
-    "주의: include / exclude / incremental 관련 경로는 각 앱의 tsconfig.json 에서 지정합니다."
+    "apps/*/* (Next.js) 용. 빌드는 Next 가 담당하므로 noEmit.",
+    "jsx 는 Next 16 create-next-app 템플릿에 맞춰 react-jsx 를 쓴다.",
+    "주의: include / exclude / paths 등 경로가 들어가는 옵션은 각 앱에서 지정한다."
   ],
   "extends": "./base.json",
   "compilerOptions": {
-    "lib": ["DOM", "DOM.Iterable", "ES2023"],
+    "lib": [
+      "DOM",
+      "DOM.Iterable",
+      "ES2023"
+    ],
     "module": "ESNext",
     "moduleResolution": "Bundler",
-    "jsx": "preserve",
+    "jsx": "react-jsx",
     "allowJs": true,
     "noEmit": true,
-    "plugins": [{ "name": "next" }]
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
   }
 }

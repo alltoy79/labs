@@ -1,0 +1,96 @@
+# 결정 기록
+
+이 레포의 규칙(`CLAUDE.md`)을 그렇게 정한 근거와 실측 결과.
+**새로운 제약·함정을 발견하면 여기에 먼저 기록하고 넘어간다.** 원복 비용이 기록 비용보다 훨씬 크다.
+
+형식: `결정 / 근거 / 실측` — 실측이 없는 항목은 추측이므로 그렇게 표시한다.
+
+---
+
+## 2026-09-04
+
+### D1. 레포 위치는 `~/itsme/project/labs`
+
+**결정** 홈 최상위 `~/itsme/` 아래. `~/Documents` 아래에 두지 않는다.
+**근거** iCloud "데스크탑 및 문서" 동기화 대상은 `~/Desktop` 과 `~/Documents` 뿐이다. 동기화 폴더에 git 레포를 두면 "저장 공간 최적화"가 `.git` 객체를 로컬에서 내려 레포가 깨진다. 지금은 iCloud 가 꺼져 있지만 나중에 켤 가능성이 있어 애초에 대상 밖에 둔다.
+**실측** iCloud Drive 비활성 확인. 홈 최상위는 iCloud 동기화 대상이 아님.
+
+### D2. git 아이덴티티를 경로 조건부로 분리
+
+**결정** 전역 `~/.gitconfig` 는 회사 이메일 유지. `[includeIf "gitdir:~/itsme/"]` 로 `~/.gitconfig-personal` 을 추가 적용.
+**근거** 개인 커밋에 회사 이메일(`@kakaocorp.com`)이 박히면 GitHub 에 노출되고, 나중에 고치려면 히스토리 재작성이 필요하다.
+**실측** 4개 시나리오 테스트 전부 통과 — 회사 레포는 회사 이메일 유지, `~/itsme/` 하위는 개인 아이덴티티, `~/temp` 등 그 밖은 누출 없음, 실제 커밋 작성자도 경로에 따라 정확히 갈림.
+
+### D3. 커밋 이름은 `alltoy79`
+
+**결정** 개인 커밋에 회사 표기(`shaheen`)를 쓰지 않는다. 이메일은 `324830161+alltoy79@users.noreply.github.com`.
+**근거** 완전 분리가 요구사항이고 레포를 다른 곳으로 이관할 가능성이 있다. GitHub noreply 형식은 실제 이메일을 숨기면서 기여 그래프에 정상 집계된다.
+**실측** 계정 ID 324830161 확인 (2017년 7월 이후 가입 계정이라 숫자 접두사 형식 필요).
+
+### D4. tsconfig 공유 설정에는 경로 옵션을 두지 않는다
+
+**결정** `@labs/config` 의 tsconfig 에는 `outDir` / `rootDir` / `include` / `exclude` 를 넣지 않는다. 각 패키지가 직접 선언한다.
+**근거·실측** TypeScript 는 `extends` 된 설정의 상대경로를 **그 파일이 있는 위치** 기준으로 해석한다. 공유 설정에 `include: ["src/**/*"]` 를 넣었더니 `packages/config/tsconfig/src/**/*` 로 풀려 `TS18003` 발생. `tsc --showConfig` 로 `outDir` 이 `../packages/config/tsconfig/dist` 로 해석되는 것까지 확인.
+
+### D5. 모든 패키지에 `"type": "module"`
+
+**결정** `packages/*`, `tools/*` 는 `package.json` 에 `"type": "module"` 을 넣는다.
+**근거·실측** `verbatimModuleSyntax` + `module: NodeNext` 조합에서 없으면 `export` 문이 `TS1287` 로 실패. 넣으면 해소되고 strict 규칙(`noUncheckedIndexedAccess`)은 정상 동작함을 확인.
+**예외** `moduleResolution: Bundler` 를 쓰는 Next.js 앱은 불필요 (`.mjs` 설정 파일로 충분).
+
+### D6. 구조는 평면 (`apps/*`, `packages/*`, `tools/*`)
+
+**결정** `apps/{learning,game}`, `packages/{shared,learning,game}` 같은 카테고리 층을 두지 않는다.
+**근거** 게임 개발 여부를 나중에 판단하기로 했고, `packages/` 안은 정의상 전부 공유 패키지라 `shared/` 가 정보를 추가하지 않는다. 프로젝트가 5개를 넘으면 재검토한다.
+
+### D7. 사고 기록 — `nvm install` 이 회사 기본 Node 를 바꿨다
+
+**무슨 일** `nvm install 22` 를 실행했더니 회사 기본 Node 가 20 → 22 로 바뀌었다. `default` 별칭이 `node` → `stable` 이라는 **동적** 별칭이어서 새 버전 설치 시 따라 올라간 것.
+**조치** `nvm alias default 20.20.2` 로 고정. 이제 새 Node 를 설치해도 안 움직인다.
+**부작용** `default` 의 의미가 동적에서 고정으로 바뀌었다. 회사용 Node 를 올릴 때는 `nvm alias default <버전>` 을 직접 실행해야 한다.
+**교훈** nvm 관련 명령 후에는 항상 `cat ~/.nvm/alias/default` 를 확인한다.
+
+---
+
+## 2026-09-05
+
+### D8. 개인 레포는 공개 npm 레지스트리를 쓴다
+
+**결정** 레포 로컬 `.npmrc` 에 `registry=https://registry.npmjs.org/`. 전역 `~/.npmrc`(사내 레지스트리 + 회사 인증 토큰)는 **무수정**.
+**근거** 사내 레지스트리를 쓰면 ①VPN 없이는 설치 자체가 불가능 ②개인 프로젝트 패키지 요청이 회사 인프라에 기록 ③회사 인증 토큰 사용.
+**실측** `create-next-app` 이 VPN 꺼진 상태에서 실패하며 드러남(`10.19.77.55` 로 SYN_SENT 후 멈춤). 수정 후 위치별 확인 — labs 는 공개, `~/Gargoyle` 과 홈은 사내 레지스트리 그대로. VPN 끊고 임시 store 로 설치해 `reused 0, downloaded 5` 로 실제 다운로드 성공까지 확인.
+
+### D9. 사고 기록 — lockfile 에 회사 호스트가 박혀 GitHub 에 올라갔다
+
+**무슨 일** 사내 레지스트리로 설치한 결과 `pnpm-lock.yaml` 의 `resolution.tarball` 에 `npm.daumkakao.io` URL 이 26곳 기록됐고 그대로 push 됐다.
+**영향** 내부 호스트명 노출(Private 레포라 제한적) + 다른 기기에서 VPN 없이 설치 실패.
+**조치** `.npmrc` 추가 → lockfile 재생성 → 히스토리를 커밋 1개로 재작성 → GitHub 레포 삭제·재생성 후 재push. 백업 번들 `~/itsme/labs-history-backup-*.bundle` 보관.
+**함정 2개**
+
+- lockfile 만 지우면 `node_modules/.pnpm/lock.yaml` 에서 복원된다. **`node_modules` 까지 지워야** 재해석된다. `pnpm install --force` 로도 안 된다.
+- zsh 는 glob 이 매칭 안 되면 **명령 전체를 실행하지 않는다.** `rm -rf node_modules packages/*/node_modules` 에서 뒤쪽이 없으면 `rm` 이 통째로 안 돈다. 이것 때문에 진단이 한참 돌아갔다.
+  **교훈** 새 개인 레포는 `.npmrc` 를 만든 **뒤** 첫 `pnpm install` 을 한다. 순서가 바뀌면 나중에 걷어내야 한다.
+
+### D10. TypeScript 는 5.9.3 (catalog). 7.x 로 올리지 않는다
+
+**결정** `pnpm-workspace.yaml` catalog 에 `typescript: ^5.9.3`.
+**근거·실측** TS 7.0.2(네이티브 컴파일러)로 `next build` 통과, `tsc --noEmit` 통과. 그러나 **`eslint` 가 완전히 실패** — `typescript-eslint does not support TS 7.0`. typescript-eslint 8.69.0 의 지원 범위는 `>=4.8.4 <6.1.0`. lint 를 포기할 수 없으므로 5.x 유지.
+**되돌리는 법** typescript-eslint 가 TS 7 을 지원하면 catalog 한 줄만 고친다. catalog 를 쓴 이유가 이것이다.
+
+### D11. 앱은 PWA 우선, 스토어는 나중에 래핑
+
+**결정** 네이티브 앱을 처음부터 만들지 않는다. Next.js PWA 로 만들고, 필요해지면 Android 는 TWA($25 일회성), iOS 는 Capacitor(연 $99)로 감싼다.
+**근거** 필요한 기능(푸시 알림, 홈 화면 설치, 오프라인, 배지)이 전부 PWA 로 가능하다. iOS 는 16.4+ 에서 홈 화면에 추가한 PWA 에 한해 웹푸시를 지원한다.
+**제약** 백그라운드 예약 작업은 불가 — 알림은 반드시 서버(크론)에서 밀어야 한다. iOS 는 홈 화면에 추가하지 않은 사이트의 저장 데이터를 7일 미사용 시 삭제하므로 학습 기록은 서버 DB 에 둔다.
+
+### D12. 문제은행은 런타임 LLM 호출 없이 배치 생성
+
+**결정** `tools/quiz-gen` CLI 로 미리 생성 → 자동 검증 → LLM 교차 검증 → 사람 검수 → JSON 커밋.
+**근거** 교육 콘텐츠는 오답·사실오류가 치명적인데 런타임 생성은 검수할 방법이 없다. 부수적으로 비용이 사용자 수에 비례하지 않고 앱 로딩이 즉시가 된다.
+**규모 제약** 초4~중3 × 3과목 = 18조합. 조합당 300문제면 5,400문제이고 문제당 30초로 검수해도 45시간이라 전량 사람 검수는 불가능. 따라서 **한 조합 50문제 파일럿으로 오류 패턴을 파악해 자동 검증 규칙을 만든 뒤 확장**한다.
+
+### D13. 이 기기는 M4 Max 인데 셸이 Rosetta 로 돈다
+
+**사실** `sysctl.proc_translated=1`, `uname -m` 이 `x86_64` 로 보고됨. 그래서 `nvm install 22` 가 x86_64 빌드를 받았다. 회사용 Node 20 은 arm64 네이티브다. Homebrew 도 `/usr/local`(x86).
+**판단** 지금은 고치지 않는다. 기능 문제가 아니라 속도만 손해이고(dev 기동 687ms, 전체 빌드 7.2초), nvm 상태를 건드리는 명령은 D7 사고 전례가 있어 위험 대비 이득이 맞지 않는다.
+**나중에 할 때** `arch -arm64` 로 Node 22 만 재설치하고, 전후로 회사 환경(특히 `~/.nvm/alias/default`)이 동일한지 검증한다. 터미널의 Rosetta 설정 자체는 건드리지 않는다 — 회사 도구가 의존할 수 있다.
