@@ -110,3 +110,35 @@
 레포는 하나지만 **앱마다 Vercel 프로젝트를 따로 만든다.** 각 프로젝트의 Root Directory 를
 `apps/<앱이름>` 으로 지정하면 도메인·환경변수·배포가 앱별로 독립된다.
 커밋 하나가 여러 프로젝트 빌드를 트리거하는 게 신경 쓰이면 그때 `turbo-ignore` 를 붙인다.
+
+## 앱 공장 (2026-09-06)
+
+### D15. `typecheck` 는 `next typegen && tsc --noEmit`
+
+**문제** 갓 만든 앱에서 `tsc --noEmit` 이 `error TS2304: Cannot find name 'LayoutProps'` 로 실패한다.
+Next 16 이 `.next/types/` 에 생성하는 라우트 타입(`LayoutProps`, `PageProps` 등)이 없기 때문.
+**해결** `next typegen` 이 전체 빌드 없이 타입만 생성한다(수 초). 앱의 `typecheck` 스크립트에 포함시켜
+빌드 여부와 무관하게 항상 돌아가게 한다. `create-app` 도 생성 직후 typegen 을 실행한다.
+**실측** `.next` 를 지운 상태에서 `pnpm --filter <app> typecheck` 통과 확인.
+**교훈** 이건 `create-app` 을 실제로 돌려보지 않았으면 앱 2호를 만들 때 그대로 밟았을 함정이다.
+생성기는 만든 뒤 반드시 실제로 실행해 검증한다.
+
+### D16. `create-app` 은 create-next-app 을 감싸고 후처리한다
+
+**결정** 자체 템플릿 디렉터리를 두지 않고 `create-next-app` 을 실행한 뒤 labs 규약을 입힌다.
+**근거** Next 16 이 `AGENTS.md` 로 경고하듯 규약이 자주 바뀐다. 자체 템플릿은 곧 낡는다.
+create-next-app 을 쓰면 최신 규약을 자동으로 따라가고, 우리는 차이(tsconfig 상속, catalog 참조,
+packageManager 제거, PWA 베이스라인)만 관리한다.
+**깨질 수 있는 지점** `layout.tsx` 의 metadata 블록을 정규식으로 교체한다. 템플릿이 바뀌면
+스크립트가 **조용히 넘어가지 않고 실패**하도록 앵커 검사를 넣었다.
+**후처리에 담긴 것** (전부 study-buddy 에서 실제로 부딪힌 것들)
+앱 내 `pnpm-workspace.yaml` 제거(설정은 루트에만) / tsconfig 를 `@labs/config` 상속으로 /
+`packageManager` 제거 / typescript·@types/node 를 catalog 참조로 / PWA 아이콘·manifest·메타데이터 /
+`apps/registry.json` 등록 / `next typegen`.
+
+### D17. `tools/*` 는 빌드 없는 순수 ESM JavaScript
+
+**결정** `tools/` 의 스크립트는 `.mjs` 로 쓰고 빌드 단계를 두지 않는다. `node` 로 바로 실행된다.
+**근거** 생성기·배포 스크립트는 타입 안전성보다 즉시 실행성과 단순함이 중요하다.
+TS 로 쓰면 빌드나 tsx 의존성이 생기고, 그 자체가 공장 유지비가 된다.
+`packages/*` 는 앱이 import 하므로 TS 를 쓴다.

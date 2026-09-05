@@ -1,0 +1,9 @@
+{
+  "name": "@labs/create-app",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "labs 규약에 맞춘 Next.js PWA 앱을 생성한다",
+  "bin": { "create-app": "./index.mjs" },
+  "dependencies": { "@labs/icon-gen": "workspace:*" }
+}

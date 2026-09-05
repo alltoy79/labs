@@ -1,0 +1,10 @@
+{
+  "name": "@labs/icon-gen",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "의존성 없이 PWA 아이콘 PNG 를 생성한다",
+  "main": "./index.mjs",
+  "exports": { ".": "./index.mjs" },
+  "bin": { "icon-gen": "./cli.mjs" }
+}

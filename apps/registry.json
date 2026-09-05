@@ -1,0 +1,14 @@
+{
+  "apps": [
+    {
+      "name": "study-buddy",
+      "title": "스터디버디",
+      "description": "초등 4학년부터 중학교 3학년까지, 국어·사회·과학을 하루 5문제씩.",
+      "themeColor": "#4f46e5",
+      "dir": "apps/study-buddy",
+      "createdAt": "2026-09-05",
+      "vercelProject": "labs-study-buddy",
+      "url": "https://labs-study-buddy.vercel.app"
+    }
+  ]
+}

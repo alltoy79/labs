@@ -12,7 +12,9 @@
     "typecheck": "turbo run typecheck",
     "test": "turbo run test",
     "format": "prettier --write \"**/*.{ts,tsx,js,json,md,yaml}\"",
-    "clean": "turbo run clean && rm -rf node_modules"
+    "clean": "turbo run clean && rm -rf node_modules",
+    "create-app": "node tools/create-app/index.mjs",
+    "deploy-app": "node tools/deploy/index.mjs"
   },
   "devDependencies": {
     "prettier": "^3.9.6",
