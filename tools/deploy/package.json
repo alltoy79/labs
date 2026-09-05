@@ -1,0 +1,8 @@
+{
+  "name": "@labs/deploy",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "앱을 Vercel 프로젝트로 연결하고 배포한다",
+  "bin": { "deploy-app": "./index.mjs" }
+}
