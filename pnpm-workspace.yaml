@@ -1,0 +1,10 @@
+packages:
+  - "apps/*"
+  - "packages/*"
+  - "tools/*"
+
+# 공통 의존성 버전을 한 곳에서 관리.
+# 각 패키지에서는 "typescript": "catalog:" 처럼 참조한다.
+catalog:
+  typescript: ^7.0.2
+  "@types/node": ^22.18.1

@@ -1,0 +1,29 @@
+# deps
+node_modules/
+.pnpm-store/
+
+# build
+.next/
+out/
+dist/
+build/
+.turbo/
+
+# env & secrets
+.env
+.env.*
+!.env.example
+
+# misc
+.DS_Store
+*.log
+coverage/
+*.tsbuildinfo
+.vercel/
+
+# claude code (기기별 로컬 설정 - 전역 gitignore에 의존하지 않도록 명시)
+.claude/settings.local.json
+
+# IDE (기기별 경로가 포함되므로 커밋하지 않음)
+.idea/
+.vscode/

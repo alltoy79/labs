@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "_comment": [
+    "packages/* 및 tools/* 용 (Node 환경).",
+    "주의: TypeScript는 extends 된 파일의 상대경로를 '그 파일 위치' 기준으로 해석합니다.",
+    "따라서 outDir / rootDir / include / exclude 는 여기 두지 않고 각 패키지에서 지정합니다."
+  ],
+  "extends": "./base.json",
+  "compilerOptions": {
+    "lib": ["ES2023"],
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true
+  }
+}

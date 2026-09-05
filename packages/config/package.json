@@ -1,0 +1,14 @@
+{
+  "name": "@labs/config",
+  "version": "0.0.0",
+  "private": true,
+  "description": "모노레포 공유 설정 (tsconfig 등)",
+  "files": [
+    "tsconfig"
+  ],
+  "exports": {
+    "./tsconfig/base.json": "./tsconfig/base.json",
+    "./tsconfig/nextjs.json": "./tsconfig/nextjs.json",
+    "./tsconfig/node-lib.json": "./tsconfig/node-lib.json"
+  }
+}
