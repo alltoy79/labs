@@ -14,7 +14,8 @@
     "format": "prettier --write \"**/*.{ts,tsx,js,json,md,yaml}\"",
     "clean": "turbo run clean && rm -rf node_modules",
     "create-app": "node tools/create-app/index.mjs",
-    "deploy-app": "node tools/deploy/index.mjs"
+    "deploy-app": "node tools/deploy/index.mjs",
+    "quiz": "node tools/quiz-gen/index.mjs"
   },
   "devDependencies": {
     "prettier": "^3.9.6",

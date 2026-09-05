@@ -104,6 +104,12 @@ importers:
 
   tools/icon-gen: {}
 
+  tools/quiz-gen:
+    dependencies:
+      '@labs/quiz-engine':
+        specifier: workspace:*
+        version: link:../../packages/quiz-engine
+
 packages:
 
   '@alloc/quick-lru@5.3.0':

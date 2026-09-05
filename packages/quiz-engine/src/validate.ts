@@ -82,11 +82,28 @@ const RULES: Rule[] = [
   {
     name: "explanation-mentions-answer",
     check: (q) => {
+      // 단순 문자열 포함으로는 안 된다. 한국어는 종결어미가 바뀌면
+      // "작아진다" 와 "작아집니다" 가 겹치지 않는다.
+      // 어절 단위로 나눠 어미를 잘라 가며 대조하고, 60% 이상 겹치면 통과시킨다.
       const answer = q.choices[q.answerIndex]!.trim();
       if (answer.length < 2) return null;
-      return q.explanation.includes(answer)
+      const tokens = answer.split(/\s+/).filter((t) => t.length >= 2);
+      if (tokens.length === 0) return null;
+
+      const matched = tokens.filter((t) => {
+        if (q.explanation.includes(t)) return true;
+        // 어미를 한 글자씩 떼어 본다. 남은 어간이 2글자 미만이면 우연히 겹칠 수 있어 버린다.
+        for (const cut of [1, 2]) {
+          const stem = t.slice(0, -cut);
+          if (stem.length >= 2 && q.explanation.includes(stem)) return true;
+        }
+        return false;
+      });
+
+      const ratio = matched.length / tokens.length;
+      return ratio >= 0.6
         ? null
-        : `해설이 정답("${answer}")을 언급하지 않음 — 다른 문제의 해설일 수 있음`;
+        : `해설이 정답("${answer}")을 거의 언급하지 않음 (일치 ${matched.length}/${tokens.length}) — 다른 문제의 해설일 수 있음`;
     },
   },
 ];

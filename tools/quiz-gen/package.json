@@ -1,0 +1,9 @@
+{
+  "name": "@labs/quiz-gen",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "문제은행 생성·검증 CLI. 런타임이 아니라 빌드 전에 돌린다.",
+  "bin": { "quiz": "./index.mjs" },
+  "dependencies": { "@labs/quiz-engine": "workspace:*" }
+}

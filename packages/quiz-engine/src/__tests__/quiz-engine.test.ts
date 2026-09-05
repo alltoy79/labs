@@ -153,6 +153,22 @@ describe("자동 검증", () => {
   test("지문에 정답이 노출된 것을 잡는다", () => {
     failed(fixture({ stem: "달의 공전 주기가 약 30일인 이유로 옳은 것은?" }), "stem-no-answer-leak");
   });
+  test("종결어미가 달라도 오탐하지 않는다 (한국어)", () => {
+    // 파일럿에서 나온 오탐. "작아진다"(선택지) vs "작아집니다"(해설) 는
+    // 단순 문자열 포함으로는 안 겹치지만 같은 내용이다.
+    const cases: Array<[string[], number, string]> = [
+      [["부피가 커진다", "부피가 작아진다", "그대로다", "사라진다"], 1, "압력이 커지면 기체의 부피가 작아집니다."],
+      [["a", "b", "c", "전류가 흐를 때만 자석이 된다"], 3, "전자석은 전류가 흐를 때만 자석이 됩니다."],
+      [["a", "b", "쓰지 않는 기구의 플러그를 뽑아 둔다", "d"], 2, "쓰지 않는 기구의 플러그를 뽑아 두는 것이 안전합니다."],
+    ];
+    for (const [choices, answerIndex, explanation] of cases) {
+      const r = runAutoChecks(fixture({ choices, answerIndex, explanation })).find(
+        (x) => x.rule === "explanation-mentions-answer",
+      );
+      assert.equal(r?.passed, true, `오탐: ${choices[answerIndex]} / ${explanation}`);
+    }
+  });
+
   test("해설이 정답을 언급하지 않는 것을 잡는다", () => {
     failed(fixture({ explanation: "지구는 태양 주위를 일 년에 한 바퀴 돕니다." }), "explanation-mentions-answer");
   });
