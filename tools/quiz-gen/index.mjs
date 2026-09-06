@@ -139,6 +139,7 @@ function cmdReview(file) {
   for (const [i, q] of items.entries()) {
     log(`\n${"─".repeat(70)}`);
     log(`[${i + 1}/${items.length}] ${q.id}  ${GRADE_SHORT[q.grade]} ${SUBJECT_LABEL[q.subject]} · ${q.unit} · 난이도 ${q.difficulty}`);
+    if (q.passage) log(`\n  [자료] ${q.passage}`);
     log(`\n  ${q.stem}\n`);
     for (const [j, c] of q.choices.entries()) {
       log(`    ${j === q.answerIndex ? "▶" : " "} ${j + 1}. ${c}`);
@@ -190,7 +191,10 @@ function cmdBlind(file) {
   log(`# 교차 검증용 문항 ${qs.length}개 — 정답이 지워져 있다\n`);
   log(`프롬프트: tools/quiz-gen/prompts/crosscheck.md\n`);
   for (const q of qs) {
-    log(`${q.id} | ${q.stem}`);
+    log(`${q.id}`);
+    // 지문이 없으면 독해 문제를 풀 수 없다. 반드시 함께 낸다.
+    if (q.passage) log(`   [자료] ${q.passage}`);
+    log(`   ${q.stem}`);
     q.choices.forEach((c, i) => log(`   ${i + 1}. ${c}`));
     log("");
   }

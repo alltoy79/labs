@@ -14,6 +14,8 @@ import {
   runAutoChecks,
   assessRisk,
   needsFactCheck,
+  makePassageId,
+  runSetChecks,
   autoChecksPassed,
   type AuthoredQuestion,
 } from "../index.js";
@@ -26,6 +28,7 @@ function fixture(over: Partial<AuthoredQuestion> = {}): AuthoredQuestion {
     subject: "science",
     type: "choice",
     unit: "지구와 달의 운동",
+    passage: null,
     stem: "달이 지구 주위를 한 바퀴 도는 데 걸리는 시간은 약 얼마인가요?",
     choices: ["약 7일", "약 15일", "약 30일", "약 365일"],
     answerIndex: 2,
@@ -38,6 +41,7 @@ function fixture(over: Partial<AuthoredQuestion> = {}): AuthoredQuestion {
     ],
     difficulty: 2,
     tags: ["달", "공전"],
+    passageId: null,
     standardCode: null,
     status: "draft",
     review: { autoChecks: [], crossCheck: null, factCheck: null, human: null },
@@ -223,5 +227,53 @@ describe("근거 대조 선별", () => {
     const mild = fixture({ id: "e6-sci-0003", explanation: "약 30일마다 반복됩니다." });
     const out = needsFactCheck([mild, risky], 1);
     assert.equal(out[0]?.id, "e6-sci-0002", "안전 주제가 먼저 와야 함");
+  });
+});
+
+describe("국어 파일럿에서 나온 오탐 (회귀)", () => {
+  test("예문에 정답이 있어도 발문만 검사한다", () => {
+    // 문장 성분 문제는 예문에서 답을 고르는 것이 정상이다.
+    const q = fixture({
+      unit: "문법",
+      passage: "어제 우리 반 친구들이 운동장에서 신나게 뛰었다.",
+      stem: "이 문장에서 주어는 무엇인가요?",
+      choices: ["어제", "우리 반 친구들이", "운동장에서", "뛰었다"],
+      answerIndex: 1,
+      explanation: "동작을 하는 주체이므로 우리 반 친구들이 주어입니다.",
+      choiceExplanations: ["시간을 나타냅니다.", "맞습니다. 뛴 주체입니다.", "장소를 나타냅니다.", "서술어입니다."],
+    });
+    const r = runAutoChecks(q).find((x) => x.rule === "stem-no-answer-leak");
+    assert.equal(r?.passed, true, "예문의 정답을 노출로 잘못 잡음");
+  });
+
+  test("정답이 길면 해설 일치 기준을 완화한다", () => {
+    const q = fixture({
+      choices: [
+        "할머니는 손이 커서 늘 음식을 넉넉히 하신다",
+        "형은 손이 커서 장갑이 맞지 않는다",
+        "동생은 손이 커서 글씨를 크게 쓴다",
+        "아버지는 손이 커서 악수할 때 힘이 세다",
+      ],
+      answerIndex: 0,
+      explanation: "'손이 크다'는 씀씀이가 넉넉하다는 뜻이라 음식을 넉넉히 하신다는 문장에 알맞습니다.",
+    });
+    const r = runAutoChecks(q).find((x) => x.rule === "explanation-mentions-answer");
+    assert.equal(r?.passed, true, "긴 정답에서 오탐");
+  });
+
+  test("같은 지문에 여러 문제를 붙여도 중복이 아니다", () => {
+    const passage = "도시의 밤은 좀처럼 어두워지지 않는다. 가로등과 간판이 밤새 빛을 내기 때문이다.";
+    const pid = makePassageId(passage);
+    const a = fixture({ id: "e6-sci-0001", passage, passageId: pid, stem: "이 글의 중심 내용은 무엇인가요?" });
+    const b = fixture({ id: "e6-sci-0002", passage, passageId: pid, stem: "글쓴이가 걱정하는 것은 무엇인가요?" });
+    const r = runSetChecks([a, b]).find((x) => x.rule === "no-duplicate-stem");
+    assert.equal(r?.passed, true, "같은 지문을 중복으로 잘못 잡음");
+  });
+
+  test("같은 지문은 같은 passageId 를 받는다", () => {
+    const p = "종이컵은 편리하지만 한 번 쓰고 버려진다.";
+    assert.equal(makePassageId(p), makePassageId("  종이컵은 편리하지만  한 번 쓰고 버려진다.  "));
+    assert.notEqual(makePassageId(p), makePassageId("다른 지문입니다."));
+    assert.equal(makePassageId(null), null);
   });
 });

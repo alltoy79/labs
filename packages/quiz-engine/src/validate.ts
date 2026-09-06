@@ -73,10 +73,13 @@ const RULES: Rule[] = [
   {
     name: "stem-no-answer-leak",
     check: (q) => {
+      // **발문(stem)만** 본다. passage 는 검사하지 않는다 —
+      // 문장 성분 문제처럼 예문에서 답을 고르는 유형은 정답이 예문에 있는 것이 정상이다.
+      // 국어 파일럿에서 이 규칙이 구조적으로 오탐했다.
       const answer = q.choices[q.answerIndex]!.trim();
       // 짧은 답(숫자 등)은 우연히 겹칠 수 있으므로 4자 이상만 본다
       if (answer.length < 4) return null;
-      return q.stem.includes(answer) ? `지문에 정답이 그대로 노출됨: "${answer}"` : null;
+      return q.stem.includes(answer) ? `발문에 정답이 그대로 노출됨: "${answer}"` : null;
     },
   },
   {
@@ -100,10 +103,13 @@ const RULES: Rule[] = [
         return false;
       });
 
+      // 정답이 길수록 해설이 전문을 인용하지 않는 것이 자연스럽다.
+      // 국어 파일럿에서 정답이 6어절인 문항이 3/6 으로 오탐했다.
+      const threshold = tokens.length <= 3 ? 0.6 : tokens.length <= 5 ? 0.5 : 0.34;
       const ratio = matched.length / tokens.length;
-      return ratio >= 0.6
+      return ratio >= threshold
         ? null
-        : `해설이 정답("${answer}")을 거의 언급하지 않음 (일치 ${matched.length}/${tokens.length}) — 다른 문제의 해설일 수 있음`;
+        : `해설이 정답("${answer}")을 거의 언급하지 않음 (일치 ${matched.length}/${tokens.length}, 기준 ${Math.round(threshold * 100)}%) — 다른 문제의 해설일 수 있음`;
     },
   },
 ];

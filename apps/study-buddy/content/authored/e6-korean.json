@@ -1,0 +1,542 @@
+[
+  {
+    "id": "e6-kor-0001",
+    "grade": "e6",
+    "subject": "korean",
+    "type": "choice",
+    "unit": "어휘",
+    "stem": "밑줄 친 낱말의 뜻으로 알맞은 것은?",
+    "choices": [
+      "몹시 놀라 어리둥절한",
+      "뜻한 바를 이루어 우쭐한",
+      "못마땅하여 말이 없고 언짢은",
+      "아무렇지 않은 척 태연한"
+    ],
+    "answerIndex": 2,
+    "explanation": "'시무룩하다'는 마음에 못마땅하여 말이 없고 얼굴에 언짢은 기색이 있다는 뜻입니다.",
+    "choiceExplanations": [
+      "놀라 어리둥절한 것은 '어안이 벙벙하다'에 가깝습니다.",
+      "우쭐한 모습은 '의기양양하다'의 뜻으로 정반대입니다.",
+      "맞습니다. 못마땅해 말이 없고 언짢은 기색이 있는 것입니다.",
+      "태연한 모습은 '천연덕스럽다'의 뜻입니다."
+    ],
+    "difficulty": 2,
+    "tags": ["어휘", "낱말 뜻"],
+    "standardCode": null,
+    "status": "verified",
+    "review": {
+      "autoChecks": [
+        "id-matches-grade-subject",
+        "subject-allowed-for-grade",
+        "choices-unique",
+        "answer-not-longest",
+        "no-banned-choice",
+        "stem-no-answer-leak",
+        "explanation-mentions-answer"
+      ],
+      "crossCheck": {
+        "passed": true,
+        "model": "claude-opus-5",
+        "at": "2026-09-06",
+        "note": "정답 일치"
+      },
+      "factCheck": {
+        "passed": true,
+        "source": "웹 검색(표준국어대사전 뜻풀이)",
+        "at": "2026-09-06",
+        "note": "유의어 문제(시무룩↔뾰로통)는 뉘앙스가 갈려 정답이 하나로 확정되지 않아 뜻풀이 문제로 교체"
+      },
+      "human": null
+    },
+    "source": {
+      "model": "claude-opus-5",
+      "promptVersion": "v1",
+      "generatedAt": "2026-09-06",
+      "batchId": "pilot-e6-kor-01"
+    },
+    "passage": "동생은 내 말을 듣더니 시무룩한 표정을 지었다.",
+    "passageId": "p-3e991f2b"
+  },
+  {
+    "id": "e6-kor-0002",
+    "grade": "e6",
+    "subject": "korean",
+    "type": "choice",
+    "unit": "어휘",
+    "stem": "빈칸에 들어갈 낱말로 알맞은 것은?",
+    "choices": ["일그러졌다", "저물었다", "피었다", "무뎌졌다"],
+    "answerIndex": 2,
+    "explanation": "'얼굴이 피다'는 표정이 밝아진다는 뜻이므로 '피었다'가 알맞습니다.",
+    "choiceExplanations": [
+      "'일그러지다'는 반듯하지 않게 찌그러진다는 뜻으로 밝은 표정과 어울리지 않습니다.",
+      "'저물다'는 해가 져서 어두워진다는 뜻입니다.",
+      "맞습니다. '얼굴이 피다'는 근심이 사라져 환해진다는 뜻입니다.",
+      "'무뎌지다'는 날이 날카롭지 않게 되거나 감각이 둔해진다는 뜻입니다."
+    ],
+    "difficulty": 2,
+    "tags": ["어휘", "관용 표현"],
+    "standardCode": null,
+    "status": "verified",
+    "review": {
+      "autoChecks": [
+        "id-matches-grade-subject",
+        "subject-allowed-for-grade",
+        "choices-unique",
+        "answer-not-longest",
+        "no-banned-choice",
+        "stem-no-answer-leak",
+        "explanation-mentions-answer"
+      ],
+      "crossCheck": {
+        "passed": true,
+        "model": "claude-opus-5",
+        "at": "2026-09-06",
+        "note": "정답 일치"
+      },
+      "factCheck": null,
+      "human": null
+    },
+    "source": {
+      "model": "claude-opus-5",
+      "promptVersion": "v1",
+      "generatedAt": "2026-09-06",
+      "batchId": "pilot-e6-kor-01"
+    },
+    "passage": "오랜 가뭄 끝에 비가 내리자 농부의 얼굴이 환하게 (    ).",
+    "passageId": "p-52e89258"
+  },
+  {
+    "id": "e6-kor-0003",
+    "grade": "e6",
+    "subject": "korean",
+    "type": "choice",
+    "unit": "어휘",
+    "stem": "'손이 크다'라는 표현이 알맞게 쓰인 문장은?",
+    "choices": [
+      "할머니는 손이 커서 늘 음식을 넉넉히 하신다",
+      "형은 손이 커서 장갑이 맞지 않는다",
+      "동생은 손이 커서 글씨를 크게 쓴다",
+      "아버지는 손이 커서 악수할 때 힘이 세다"
+    ],
+    "answerIndex": 0,
+    "explanation": "'손이 크다'는 씀씀이가 넉넉하다는 뜻의 관용 표현이므로, 음식을 넉넉히 한다는 문장에 알맞게 쓰였습니다.",
+    "choiceExplanations": [
+      "맞습니다. 씀씀이가 넉넉하다는 뜻으로 바르게 쓰였습니다.",
+      "실제 손의 크기를 말한 것이라 관용 표현이 아닙니다.",
+      "글씨 크기와 손 크기는 관용 표현의 뜻과 관계없습니다.",
+      "악력이 세다는 뜻으로 쓴 것이라 관용 표현의 뜻이 아닙니다."
+    ],
+    "difficulty": 2,
+    "tags": ["관용 표현", "어휘"],
+    "standardCode": null,
+    "status": "verified",
+    "review": {
+      "autoChecks": [
+        "id-matches-grade-subject",
+        "subject-allowed-for-grade",
+        "choices-unique",
+        "answer-not-longest",
+        "no-banned-choice",
+        "stem-no-answer-leak",
+        "explanation-mentions-answer"
+      ],
+      "crossCheck": {
+        "passed": true,
+        "model": "claude-opus-5",
+        "at": "2026-09-06",
+        "note": "정답 일치"
+      },
+      "factCheck": null,
+      "human": null
+    },
+    "source": {
+      "model": "claude-opus-5",
+      "promptVersion": "v1",
+      "generatedAt": "2026-09-06",
+      "batchId": "pilot-e6-kor-01"
+    },
+    "passage": null,
+    "passageId": null
+  },
+  {
+    "id": "e6-kor-0004",
+    "grade": "e6",
+    "subject": "korean",
+    "type": "choice",
+    "unit": "한자어",
+    "stem": "다음 문장의 '유래'와 바꾸어 쓸 수 있는 말은?",
+    "choices": ["결과", "바뀐 모습", "남은 흔적", "시작된 까닭"],
+    "answerIndex": 3,
+    "explanation": "'유래'는 사물이나 일이 생겨난 바, 즉 시작된 까닭을 뜻합니다.",
+    "choiceExplanations": [
+      "'결과'는 어떤 일이 끝난 뒤의 상태로 시작과는 반대입니다.",
+      "'변화'에 가까운 뜻으로 유래와는 다릅니다.",
+      "'흔적'은 남은 자취를 뜻하며 시작된 까닭과는 다릅니다.",
+      "맞습니다. 유래는 어떤 일이 생겨난 내력을 뜻합니다."
+    ],
+    "difficulty": 2,
+    "tags": ["한자어", "어휘"],
+    "standardCode": null,
+    "status": "verified",
+    "review": {
+      "autoChecks": [
+        "id-matches-grade-subject",
+        "subject-allowed-for-grade",
+        "choices-unique",
+        "answer-not-longest",
+        "no-banned-choice",
+        "stem-no-answer-leak",
+        "explanation-mentions-answer"
+      ],
+      "crossCheck": {
+        "passed": true,
+        "model": "claude-opus-5",
+        "at": "2026-09-06",
+        "note": "정답 일치"
+      },
+      "factCheck": {
+        "passed": true,
+        "source": "웹 검색(표준국어대사전)",
+        "at": "2026-09-06",
+        "note": "'유래 = 사물이나 일이 생겨난 바' 확인"
+      },
+      "human": null
+    },
+    "source": {
+      "model": "claude-opus-5",
+      "promptVersion": "v1",
+      "generatedAt": "2026-09-06",
+      "batchId": "pilot-e6-kor-01"
+    },
+    "passage": "이 축제의 유래를 알아보았다.",
+    "passageId": "p-2c044aca"
+  },
+  {
+    "id": "e6-kor-0005",
+    "grade": "e6",
+    "subject": "korean",
+    "type": "choice",
+    "unit": "한자어",
+    "stem": "'무분별하다'의 뜻으로 알맞은 것은?",
+    "choices": [
+      "아주 조심스럽다",
+      "크기가 매우 작다",
+      "가려서 판단하지 못하다",
+      "분명하게 나뉘어 있다"
+    ],
+    "answerIndex": 2,
+    "explanation": "'무분별하다'는 옳고 그름을 가려서 판단하지 못한다는 뜻입니다.",
+    "choiceExplanations": [
+      "조심스러운 것은 오히려 분별이 있는 태도입니다.",
+      "크기와는 관계없는 낱말입니다.",
+      "맞습니다. '분별'이 없다는 뜻입니다.",
+      "'분별'이 있다는 뜻이 되어 정반대입니다."
+    ],
+    "difficulty": 1,
+    "tags": ["한자어", "어휘"],
+    "standardCode": null,
+    "status": "verified",
+    "review": {
+      "autoChecks": [
+        "id-matches-grade-subject",
+        "subject-allowed-for-grade",
+        "choices-unique",
+        "answer-not-longest",
+        "no-banned-choice",
+        "stem-no-answer-leak",
+        "explanation-mentions-answer"
+      ],
+      "crossCheck": {
+        "passed": true,
+        "model": "claude-opus-5",
+        "at": "2026-09-06",
+        "note": "정답 일치"
+      },
+      "factCheck": {
+        "passed": true,
+        "source": "웹 검색(표준국어대사전)",
+        "at": "2026-09-06",
+        "note": "'무분별하다 = 분별이 없다' 확인"
+      },
+      "human": null
+    },
+    "source": {
+      "model": "claude-opus-5",
+      "promptVersion": "v1",
+      "generatedAt": "2026-09-06",
+      "batchId": "pilot-e6-kor-01"
+    },
+    "passage": null,
+    "passageId": null
+  },
+  {
+    "id": "e6-kor-0006",
+    "grade": "e6",
+    "subject": "korean",
+    "type": "choice",
+    "unit": "문법",
+    "stem": "높임 표현이 바르게 쓰인 문장은?",
+    "choices": [
+      "할아버지께서 방에 계신다",
+      "선생님이 교실에 있다",
+      "어머니가 진지를 먹는다",
+      "할머니께서 나이가 많다"
+    ],
+    "answerIndex": 0,
+    "explanation": "'할아버지께서 방에 계신다'는 조사 '께서'와 높임말 '계시다'를 함께 써서 높임 표현이 바르게 쓰였습니다.",
+    "choiceExplanations": [
+      "맞습니다. '께서'와 '계시다'가 모두 알맞게 쓰였습니다.",
+      "'선생님께서 교실에 계신다'로 고쳐야 합니다.",
+      "'어머니께서 진지를 잡수신다'로 고쳐야 합니다.",
+      "'할머니께서 연세가 많으시다'로 고쳐야 합니다."
+    ],
+    "difficulty": 2,
+    "tags": ["문법", "높임 표현"],
+    "standardCode": null,
+    "status": "verified",
+    "review": {
+      "autoChecks": [
+        "id-matches-grade-subject",
+        "subject-allowed-for-grade",
+        "choices-unique",
+        "answer-not-longest",
+        "no-banned-choice",
+        "stem-no-answer-leak",
+        "explanation-mentions-answer"
+      ],
+      "crossCheck": {
+        "passed": true,
+        "model": "claude-opus-5",
+        "at": "2026-09-06",
+        "note": "정답 일치"
+      },
+      "factCheck": null,
+      "human": null
+    },
+    "source": {
+      "model": "claude-opus-5",
+      "promptVersion": "v1",
+      "generatedAt": "2026-09-06",
+      "batchId": "pilot-e6-kor-01"
+    },
+    "passage": null,
+    "passageId": null
+  },
+  {
+    "id": "e6-kor-0007",
+    "grade": "e6",
+    "subject": "korean",
+    "type": "choice",
+    "unit": "문법",
+    "stem": "다음 문장에서 주어는 무엇인가요?",
+    "choices": ["어제", "우리 반 친구들이", "운동장에서", "뛰었다"],
+    "answerIndex": 1,
+    "explanation": "주어는 동작을 하는 주체이므로 '우리 반 친구들이'가 주어입니다.",
+    "choiceExplanations": [
+      "'어제'는 시간을 나타내는 말로 주어가 아닙니다.",
+      "맞습니다. 뛴 주체를 나타내므로 주어입니다.",
+      "'운동장에서'는 장소를 나타내는 말입니다.",
+      "'뛰었다'는 동작을 나타내는 서술어입니다."
+    ],
+    "difficulty": 1,
+    "tags": ["문법", "문장 성분"],
+    "standardCode": null,
+    "status": "verified",
+    "review": {
+      "autoChecks": [
+        "id-matches-grade-subject",
+        "subject-allowed-for-grade",
+        "choices-unique",
+        "answer-not-longest",
+        "no-banned-choice",
+        "stem-no-answer-leak",
+        "explanation-mentions-answer"
+      ],
+      "crossCheck": {
+        "passed": true,
+        "model": "claude-opus-5",
+        "at": "2026-09-06",
+        "note": "정답 일치"
+      },
+      "factCheck": null,
+      "human": null
+    },
+    "source": {
+      "model": "claude-opus-5",
+      "promptVersion": "v1",
+      "generatedAt": "2026-09-06",
+      "batchId": "pilot-e6-kor-01"
+    },
+    "passage": "어제 우리 반 친구들이 운동장에서 신나게 뛰었다.",
+    "passageId": "p-8747d834"
+  },
+  {
+    "id": "e6-kor-0008",
+    "grade": "e6",
+    "subject": "korean",
+    "type": "choice",
+    "unit": "독해",
+    "stem": "이 글의 중심 내용으로 알맞은 것은?",
+    "choices": [
+      "도시의 가로등은 종류가 다양하다",
+      "철새는 계절에 따라 먼 거리를 이동한다",
+      "곤충은 밤에만 활동하는 습성이 있다",
+      "밤에도 밝은 빛이 생물에게 해를 끼친다"
+    ],
+    "answerIndex": 3,
+    "explanation": "글은 밤에도 밝은 빛이 생물에게 해를 끼친다는 점을 곤충과 철새의 예를 들어 설명하고 있습니다.",
+    "choiceExplanations": [
+      "가로등의 종류는 글에 나오지 않습니다.",
+      "철새의 이동은 예로 잠깐 나올 뿐 중심 내용이 아닙니다.",
+      "곤충이 밤에 활동한다는 언급은 있지만 글의 중심 내용은 아닙니다.",
+      "맞습니다. 곤충과 철새의 피해를 들어 이 점을 말하고 있습니다."
+    ],
+    "difficulty": 2,
+    "tags": ["독해", "중심 내용"],
+    "standardCode": null,
+    "status": "verified",
+    "review": {
+      "autoChecks": [
+        "id-matches-grade-subject",
+        "subject-allowed-for-grade",
+        "choices-unique",
+        "answer-not-longest",
+        "no-banned-choice",
+        "stem-no-answer-leak",
+        "explanation-mentions-answer"
+      ],
+      "crossCheck": {
+        "passed": true,
+        "model": "claude-opus-5",
+        "at": "2026-09-06",
+        "note": "정답 일치"
+      },
+      "factCheck": {
+        "passed": true,
+        "source": "자체 확인",
+        "at": "2026-09-06",
+        "note": "직접 쓴 지문이고 안전 지침이 아니라 위험 신호(불=불빛)는 오탐. 빛 공해가 곤충·철새에 영향을 준다는 서술은 일반적으로 알려진 사실"
+      },
+      "human": null
+    },
+    "source": {
+      "model": "claude-opus-5",
+      "promptVersion": "v1",
+      "generatedAt": "2026-09-06",
+      "batchId": "pilot-e6-kor-01"
+    },
+    "passage": "도시의 밤은 좀처럼 어두워지지 않는다. 가로등과 간판이 밤새 빛을 내기 때문이다. 이런 빛은 사람에게는 편리하지만 다른 생물에게는 그렇지 않다. 밤에 활동하는 곤충은 불빛에 이끌려 제자리를 맴돌다 지쳐 죽기도 한다. 철새는 밝은 빛 때문에 길을 잃기도 한다. 편리함을 조금 줄이면 함께 사는 길이 열린다.",
+    "passageId": "p-eb8b118a"
+  },
+  {
+    "id": "e6-kor-0009",
+    "grade": "e6",
+    "subject": "korean",
+    "type": "choice",
+    "unit": "독해",
+    "stem": "글쓴이가 마지막 문장에서 말하려는 것은 무엇인가요?",
+    "choices": [
+      "가로등을 모두 없애야 한다",
+      "밝기를 줄이면 생물과 함께 살 수 있다",
+      "도시보다 시골이 살기 좋다",
+      "곤충을 보호하는 법을 만들어야 한다"
+    ],
+    "answerIndex": 1,
+    "explanation": "'편리함을 조금 줄이면 함께 사는 길이 열린다'는 밝기를 줄이면 생물과 함께 살 수 있다는 뜻입니다.",
+    "choiceExplanations": [
+      "글은 '조금 줄이면'이라고 했지 모두 없애자고 하지 않았습니다.",
+      "맞습니다. 편리함을 조금 양보하자는 제안입니다.",
+      "도시와 시골을 비교하는 내용은 글에 없습니다.",
+      "법을 만들자는 주장은 글에 나오지 않습니다."
+    ],
+    "difficulty": 3,
+    "tags": ["독해", "글쓴이의 의도"],
+    "standardCode": null,
+    "status": "verified",
+    "review": {
+      "autoChecks": [
+        "id-matches-grade-subject",
+        "subject-allowed-for-grade",
+        "choices-unique",
+        "answer-not-longest",
+        "no-banned-choice",
+        "stem-no-answer-leak",
+        "explanation-mentions-answer"
+      ],
+      "crossCheck": {
+        "passed": true,
+        "model": "claude-opus-5",
+        "at": "2026-09-06",
+        "note": "정답 일치"
+      },
+      "factCheck": {
+        "passed": true,
+        "source": "자체 확인",
+        "at": "2026-09-06",
+        "note": "직접 쓴 지문이고 안전 지침이 아니라 위험 신호(불=불빛)는 오탐. 빛 공해가 곤충·철새에 영향을 준다는 서술은 일반적으로 알려진 사실"
+      },
+      "human": null
+    },
+    "source": {
+      "model": "claude-opus-5",
+      "promptVersion": "v1",
+      "generatedAt": "2026-09-06",
+      "batchId": "pilot-e6-kor-01"
+    },
+    "passage": "도시의 밤은 좀처럼 어두워지지 않는다. 가로등과 간판이 밤새 빛을 내기 때문이다. 이런 빛은 사람에게는 편리하지만 다른 생물에게는 그렇지 않다. 밤에 활동하는 곤충은 불빛에 이끌려 제자리를 맴돌다 지쳐 죽기도 한다. 철새는 밝은 빛 때문에 길을 잃기도 한다. 편리함을 조금 줄이면 함께 사는 길이 열린다.",
+    "passageId": "p-eb8b118a"
+  },
+  {
+    "id": "e6-kor-0010",
+    "grade": "e6",
+    "subject": "korean",
+    "type": "choice",
+    "unit": "독해",
+    "stem": "이 글에 나타난 종이컵의 문제로 알맞은 것은?",
+    "choices": [
+      "값이 너무 비싸다",
+      "물이 금방 새어 나온다",
+      "안쪽 비닐 때문에 재활용이 어렵다",
+      "만드는 데 시간이 오래 걸린다"
+    ],
+    "answerIndex": 2,
+    "explanation": "글에서 겉은 종이라도 안쪽에 얇은 비닐이 발려 있어 안쪽 비닐 때문에 재활용이 어렵다고 했습니다.",
+    "choiceExplanations": [
+      "값에 대한 내용은 글에 없습니다.",
+      "물이 샌다는 내용은 글에 나오지 않습니다.",
+      "맞습니다. 안쪽 비닐이 재활용을 어렵게 한다고 했습니다.",
+      "제작 시간에 대한 언급은 없습니다."
+    ],
+    "difficulty": 1,
+    "tags": ["독해", "세부 내용"],
+    "standardCode": null,
+    "status": "verified",
+    "review": {
+      "autoChecks": [
+        "id-matches-grade-subject",
+        "subject-allowed-for-grade",
+        "choices-unique",
+        "answer-not-longest",
+        "no-banned-choice",
+        "stem-no-answer-leak",
+        "explanation-mentions-answer"
+      ],
+      "crossCheck": {
+        "passed": true,
+        "model": "claude-opus-5",
+        "at": "2026-09-06",
+        "note": "정답 일치"
+      },
+      "factCheck": null,
+      "human": null
+    },
+    "source": {
+      "model": "claude-opus-5",
+      "promptVersion": "v1",
+      "generatedAt": "2026-09-06",
+      "batchId": "pilot-e6-kor-01"
+    },
+    "passage": "종이컵은 편리하지만 한 번 쓰고 버려진다. 겉은 종이라도 안쪽에는 얇은 비닐이 발려 있어 그대로는 재활용하기 어렵다. 씻어서 따로 모으면 다시 쓸 수 있지만 손이 많이 간다. 그래서 아예 적게 쓰는 편이 낫다는 의견이 많다.",
+    "passageId": "p-4e6225ed"
+  }
+]

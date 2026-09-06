@@ -62,6 +62,8 @@ export function runSetChecks(questions: AuthoredQuestion[]): SetCheckResult[] {
   });
 
   // ── 문제 중복 ──
+  // stem(발문)만 비교한다. 같은 passage 에 여러 문제를 붙이는 것은
+  // 독해의 정상 구조이므로 중복이 아니다.
   const stems = new Map<string, string[]>();
   for (const q of questions) {
     const key = q.stem.replace(/\s+/g, "").slice(0, 40);

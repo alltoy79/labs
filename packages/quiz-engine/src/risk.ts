@@ -37,17 +37,32 @@ const NUMBER_RE = /\d+\s*(일|시간|분|초|년|개월|도|℃|%|배|미터|m|c
 /** 단정 표현은 반례가 있기 쉽다 */
 const ABSOLUTE_TERMS = ["항상", "반드시", "절대", "모두", "전혀", "결코", "무조건", "언제나"];
 
-/** 정의·원리를 규정하는 서술 */
-const DEFINITION_RE = /(라고 한다|라고 하며|이라고 한다|을 뜻한다|를 뜻한다|이란|라 부른다)/g;
+/**
+ * 정의·원리를 규정하는 서술.
+ *
+ * 종결어미를 한 가지로 고정하면 안 된다 — "뜻한다" 만 넣었더니
+ * 해설체("뜻합니다")를 전부 놓쳤다. D26(종결어미 오탐)과 같은 계열의 함정이다.
+ * 어간까지만 쓰고 어미는 열어 둔다.
+ */
+const DEFINITION_RE =
+  /(라고 (한다|합니다|하며|하고)|이라고 (한다|합니다)|(을|를) 뜻(한다|합니다|하며)|뜻이(다|므로|라서|고)|이란 |라 (부른다|부릅니다)|의 뜻은)/g;
 
 function collect(text: string, terms: string[]): string[] {
   return [...new Set(terms.filter((t) => text.includes(t)))];
 }
 
 export function assessRisk(q: AuthoredQuestion): RiskAssessment {
-  // 지문·선택지·해설을 전부 본다. 해설의 오류가 가장 위험하다.
-  const text = [q.stem, ...q.choices, q.explanation, ...q.choiceExplanations].join(" ");
+  // 자료·발문·선택지·해설을 전부 본다. 해설의 오류가 가장 위험하다.
+  const text = [q.passage ?? "", q.stem, ...q.choices, q.explanation, ...q.choiceExplanations].join(
+    " ",
+  );
   const signals: RiskSignal[] = [];
+
+  // 국어의 어휘·한자어는 "낱말 뜻이 맞나" 를 사전으로 확인해야 한다.
+  // 틀린 뜻을 가르치는 것은 안전 문제만큼은 아니어도 교육적으로 치명적이다.
+  if (q.subject === "korean" && /어휘|한자|낱말|관용/.test(q.unit + q.tags.join(" "))) {
+    signals.push({ kind: "definition", label: "낱말 뜻 — 사전 확인 필요", hits: [q.unit] });
+  }
 
   const safety = collect(text, SAFETY_TERMS);
   if (safety.length) {

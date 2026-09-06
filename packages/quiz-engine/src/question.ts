@@ -20,8 +20,19 @@ export const QUESTION_TYPES = ["choice"] as const;
 export const choiceDraftSchema = z.strictObject({
   /** 교육과정 단원명. 예: "지구와 달의 운동" */
   unit: z.string().min(2).max(60),
-  /** 문제 지문 */
-  stem: z.string().min(5).max(400),
+  /**
+   * 문제를 풀기 위해 **읽어야 하는 자료** — 독해 지문, 어휘 예문, 문법 예문.
+   * 필요 없으면 null.
+   *
+   * stem 과 나누는 이유:
+   *  - 같은 지문에 여러 문제를 붙일 수 있다 (독해의 정상 구조)
+   *  - 앱이 지문을 한 번만 보여주고 문제만 넘길 수 있다
+   *  - "지문에 정답이 노출됐는지" 검사가 발문만 보게 된다 —
+   *    문장 성분 문제는 예문에서 답을 고르는 것이 정상이다
+   */
+  passage: z.string().min(5).max(600).nullable(),
+  /** 발문. 무엇을 묻는지만 적는다. 읽을 자료는 passage 로 뺀다. */
+  stem: z.string().min(5).max(300),
   /** 선택지 4개 */
   choices: z.array(z.string().min(1).max(120)).length(4),
   /** 정답 위치 (0~3) */
@@ -86,6 +97,11 @@ export const authoredQuestionSchema = choiceDraftSchema.extend({
   grade: z.enum(GRADES),
   subject: z.enum(SUBJECTS),
   type: z.enum(QUESTION_TYPES),
+  /**
+   * 같은 지문을 쓰는 문제들을 묶는 키. 도구가 지문 내용으로 자동 부여한다.
+   * 앱은 이 값이 같은 문제들을 한 지문 아래 이어서 보여줄 수 있다.
+   */
+  passageId: z.string().nullable(),
   /** 교육부 성취기준 코드. 근거 자료로 생성했을 때만 채워진다. */
   standardCode: z.string().nullable(),
   /** verified 만 앱에 나간다 */
@@ -100,6 +116,7 @@ export const publishedQuestionSchema = choiceDraftSchema
   .omit({ difficulty: true, tags: true })
   .extend({
     id: z.string(),
+    passageId: z.string().nullable(),
     grade: z.enum(GRADES),
     subject: z.enum(SUBJECTS),
     type: z.enum(QUESTION_TYPES),

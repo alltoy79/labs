@@ -48,7 +48,9 @@
       "promptVersion": "v1",
       "generatedAt": "2026-09-06",
       "batchId": "pilot-e6-sci-01"
-    }
+    },
+    "passage": null,
+    "passageId": null
   },
   {
     "id": "e6-sci-0002",
@@ -99,7 +101,9 @@
       "promptVersion": "v1",
       "generatedAt": "2026-09-06",
       "batchId": "pilot-e6-sci-01"
-    }
+    },
+    "passage": null,
+    "passageId": null
   },
   {
     "id": "e6-sci-0003",
@@ -150,7 +154,9 @@
       "promptVersion": "v1",
       "generatedAt": "2026-09-06",
       "batchId": "pilot-e6-sci-01"
-    }
+    },
+    "passage": null,
+    "passageId": null
   },
   {
     "id": "e6-sci-0004",
@@ -201,7 +207,9 @@
       "promptVersion": "v1",
       "generatedAt": "2026-09-06",
       "batchId": "pilot-e6-sci-01"
-    }
+    },
+    "passage": null,
+    "passageId": null
   },
   {
     "id": "e6-sci-0005",
@@ -252,7 +260,9 @@
       "promptVersion": "v1",
       "generatedAt": "2026-09-06",
       "batchId": "pilot-e6-sci-01"
-    }
+    },
+    "passage": null,
+    "passageId": null
   },
   {
     "id": "e6-sci-0006",
@@ -303,7 +313,9 @@
       "promptVersion": "v1",
       "generatedAt": "2026-09-06",
       "batchId": "pilot-e6-sci-01"
-    }
+    },
+    "passage": null,
+    "passageId": null
   },
   {
     "id": "e6-sci-0007",
@@ -354,7 +366,9 @@
       "promptVersion": "v1",
       "generatedAt": "2026-09-06",
       "batchId": "pilot-e6-sci-01"
-    }
+    },
+    "passage": null,
+    "passageId": null
   },
   {
     "id": "e6-sci-0008",
@@ -363,14 +377,14 @@
     "type": "choice",
     "unit": "여러 가지 기체",
     "stem": "어떤 기체를 석회수에 넣고 흔들었더니 석회수가 뿌옇게 흐려졌습니다. 이 기체는 무엇인가요?",
-    "choices": ["산소", "질소", "이산화 탄소", "헬륨"],
-    "answerIndex": 2,
+    "choices": ["산소", "질소", "헬륨", "이산화 탄소"],
+    "answerIndex": 3,
     "explanation": "이산화 탄소는 석회수를 뿌옇게 흐리게 하는 성질이 있어서, 이 방법으로 이산화 탄소인지 확인합니다.",
     "choiceExplanations": [
       "산소는 석회수를 흐리게 하지 않고 향불로 확인합니다.",
       "질소는 석회수와 반응하지 않아 변화가 없습니다.",
-      "맞습니다. 석회수를 흐리게 하는 것은 이산화 탄소의 특징입니다.",
-      "헬륨은 석회수와 반응하지 않는 가벼운 기체입니다."
+      "헬륨은 석회수와 반응하지 않는 가벼운 기체입니다.",
+      "맞습니다. 석회수를 흐리게 하는 것은 이산화 탄소의 특징입니다."
     ],
     "difficulty": 1,
     "tags": ["이산화 탄소", "석회수"],
@@ -405,7 +419,9 @@
       "promptVersion": "v1",
       "generatedAt": "2026-09-06",
       "batchId": "pilot-e6-sci-01"
-    }
+    },
+    "passage": null,
+    "passageId": null
   },
   {
     "id": "e6-sci-0009",
@@ -451,7 +467,9 @@
       "promptVersion": "v1",
       "generatedAt": "2026-09-06",
       "batchId": "pilot-e6-sci-01"
-    }
+    },
+    "passage": null,
+    "passageId": null
   },
   {
     "id": "e6-sci-0010",
@@ -502,7 +520,9 @@
       "promptVersion": "v1",
       "generatedAt": "2026-09-06",
       "batchId": "pilot-e6-sci-01"
-    }
+    },
+    "passage": null,
+    "passageId": null
   },
   {
     "id": "e6-sci-0011",
@@ -511,14 +531,14 @@
     "type": "choice",
     "unit": "식물의 구조와 기능",
     "stem": "잎이 붙어 있는 가지와 잎을 모두 딴 가지에 각각 비닐봉지를 씌웠더니, 잎이 있는 쪽에만 물방울이 많이 맺혔습니다. 이 현상을 무엇이라고 하나요?",
-    "choices": ["광합성", "증산 작용", "호흡", "발아"],
-    "answerIndex": 1,
+    "choices": ["광합성", "발아", "호흡", "증산 작용"],
+    "answerIndex": 3,
     "explanation": "증산 작용입니다. 뿌리에서 올라온 물이 잎의 작은 구멍을 통해 수증기가 되어 빠져나가기 때문에 물방울이 맺힙니다.",
     "choiceExplanations": [
       "광합성은 빛을 이용해 양분을 만드는 과정으로 물방울이 맺히는 까닭이 아닙니다.",
-      "맞습니다. 잎에서 물이 빠져나가는 것을 증산 작용이라고 합니다.",
+      "발아는 씨에서 싹이 트는 것을 말합니다.",
       "호흡은 산소를 들이마시고 이산화 탄소를 내보내는 과정입니다.",
-      "발아는 씨에서 싹이 트는 것을 말합니다."
+      "맞습니다. 잎에서 물이 빠져나가는 것을 증산 작용이라고 합니다."
     ],
     "difficulty": 2,
     "tags": ["잎", "증산 작용"],
@@ -548,7 +568,9 @@
       "promptVersion": "v1",
       "generatedAt": "2026-09-06",
       "batchId": "pilot-e6-sci-01"
-    }
+    },
+    "passage": null,
+    "passageId": null
   },
   {
     "id": "e6-sci-0012",
@@ -594,7 +616,9 @@
       "promptVersion": "v1",
       "generatedAt": "2026-09-06",
       "batchId": "pilot-e6-sci-01"
-    }
+    },
+    "passage": null,
+    "passageId": null
   },
   {
     "id": "e6-sci-0013",
@@ -605,17 +629,17 @@
     "stem": "물이 담긴 컵에 젓가락을 비스듬히 넣었더니 물 표면에서 꺾여 보였습니다. 그 까닭은?",
     "choices": [
       "빛이 곧게 나아가서",
-      "빛이 물에서 꺾여 나아가서",
+      "물이 젓가락을 밀어내서",
       "젓가락이 실제로 휘어져서",
-      "물이 젓가락을 밀어내서"
+      "빛이 물에서 꺾여 나아가서"
     ],
-    "answerIndex": 1,
+    "answerIndex": 3,
     "explanation": "빛이 물에서 꺾여 나아가서 젓가락이 꺾여 보입니다. 빛이 공기와 물의 경계를 지날 때 진행 방향이 바뀌는 것을 굴절이라고 합니다.",
     "choiceExplanations": [
       "빛이 곧게만 나아간다면 젓가락은 꺾여 보이지 않습니다.",
-      "맞습니다. 서로 다른 물질의 경계에서 빛이 꺾이기 때문입니다.",
+      "물은 젓가락을 밀어내지 않으며 모양을 바꾸지도 않습니다.",
       "젓가락을 꺼내 보면 휘어지지 않았음을 알 수 있습니다.",
-      "물은 젓가락을 밀어내지 않으며 모양을 바꾸지도 않습니다."
+      "맞습니다. 서로 다른 물질의 경계에서 빛이 꺾이기 때문입니다."
     ],
     "difficulty": 2,
     "tags": ["굴절", "빛"],
@@ -645,7 +669,9 @@
       "promptVersion": "v1",
       "generatedAt": "2026-09-06",
       "batchId": "pilot-e6-sci-01"
-    }
+    },
+    "passage": null,
+    "passageId": null
   },
   {
     "id": "e6-sci-0014",
@@ -696,7 +722,9 @@
       "promptVersion": "v1",
       "generatedAt": "2026-09-06",
       "batchId": "pilot-e6-sci-01"
-    }
+    },
+    "passage": null,
+    "passageId": null
   },
   {
     "id": "e6-sci-0015",
@@ -742,7 +770,9 @@
       "promptVersion": "v1",
       "generatedAt": "2026-09-06",
       "batchId": "pilot-e6-sci-01"
-    }
+    },
+    "passage": null,
+    "passageId": null
   },
   {
     "id": "e6-sci-0016",
@@ -793,7 +823,9 @@
       "promptVersion": "v1",
       "generatedAt": "2026-09-06",
       "batchId": "pilot-e6-sci-01"
-    }
+    },
+    "passage": null,
+    "passageId": null
   },
   {
     "id": "e6-sci-0017",
@@ -844,7 +876,9 @@
       "promptVersion": "v1",
       "generatedAt": "2026-09-06",
       "batchId": "pilot-e6-sci-01"
-    }
+    },
+    "passage": null,
+    "passageId": null
   },
   {
     "id": "e6-sci-0018",
@@ -900,7 +934,9 @@
       "promptVersion": "v1",
       "generatedAt": "2026-09-06",
       "batchId": "pilot-e6-sci-01"
-    }
+    },
+    "passage": null,
+    "passageId": null
   },
   {
     "id": "e6-sci-0019",
@@ -951,7 +987,9 @@
       "promptVersion": "v1",
       "generatedAt": "2026-09-06",
       "batchId": "pilot-e6-sci-01"
-    }
+    },
+    "passage": null,
+    "passageId": null
   },
   {
     "id": "e6-sci-0020",
@@ -1002,7 +1040,9 @@
       "promptVersion": "v1",
       "generatedAt": "2026-09-06",
       "batchId": "pilot-e6-sci-01"
-    }
+    },
+    "passage": null,
+    "passageId": null
   },
   {
     "id": "e6-sci-0021",
@@ -1048,7 +1088,9 @@
       "promptVersion": "v1",
       "generatedAt": "2026-09-06",
       "batchId": "pilot-e6-sci-01"
-    }
+    },
+    "passage": null,
+    "passageId": null
   },
   {
     "id": "e6-sci-0022",
@@ -1104,7 +1146,9 @@
       "promptVersion": "v1",
       "generatedAt": "2026-09-06",
       "batchId": "pilot-e6-sci-01"
-    }
+    },
+    "passage": null,
+    "passageId": null
   },
   {
     "id": "e6-sci-0023",
@@ -1160,7 +1204,9 @@
       "promptVersion": "v1",
       "generatedAt": "2026-09-06",
       "batchId": "pilot-e6-sci-01"
-    }
+    },
+    "passage": null,
+    "passageId": null
   },
   {
     "id": "e6-sci-0024",
@@ -1220,6 +1266,8 @@
       "promptVersion": "v1",
       "generatedAt": "2026-09-06",
       "batchId": "pilot-e6-sci-01"
-    }
+    },
+    "passage": null,
+    "passageId": null
   }
 ]
