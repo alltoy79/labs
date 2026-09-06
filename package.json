@@ -15,7 +15,9 @@
     "clean": "turbo run clean && rm -rf node_modules",
     "create-app": "node tools/create-app/index.mjs",
     "deploy-app": "node tools/deploy/index.mjs",
-    "quiz": "node tools/quiz-gen/index.mjs"
+    "quiz": "node tools/quiz-gen/index.mjs",
+    "quiz:publish": "node tools/quiz-gen/index.mjs publish apps/study-buddy/content/authored/*.json",
+    "quiz:check": "node tools/quiz-gen/index.mjs publish apps/study-buddy/content/authored/*.json --check"
   },
   "devDependencies": {
     "prettier": "^3.9.6",

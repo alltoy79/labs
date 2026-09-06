@@ -1,0 +1,14 @@
+{
+  "generatedAt": "2026-09-06",
+  "grades": [
+    {
+      "grade": "e6",
+      "count": 34,
+      "subjects": [
+        "korean",
+        "science"
+      ],
+      "file": "e6.json"
+    }
+  ]
+}

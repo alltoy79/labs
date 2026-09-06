@@ -19,6 +19,9 @@ import {
   runSetChecks,
   needsFactCheck,
   assessRisk,
+  toPublished,
+  publishedQuestionSchema,
+  GRADE_SHORT as GS,
 } from "@labs/quiz-engine";
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
@@ -36,6 +39,8 @@ const usage = `
   review <파일>        검수용으로 한 문제씩 사람이 읽기 좋게 출력
   status <파일...>     검증 단계별 진행 상황 (구조/교차/근거/사람)
   promote <파일...> [--apply]  검증을 모두 통과한 문제를 verified 로 승격
+  publish <파일...> [--check]  verified 만 골라 앱이 읽을 형태로 내보낸다
+                               --check 는 내보내지 않고 최신인지만 확인한다
   generate             (미구현) API 키가 준비되면 여기에 붙인다
 
 예시
@@ -313,6 +318,79 @@ function cmdPromote(files, apply) {
   return 0;
 }
 
+/**
+ * authored → published.
+ *
+ * verified 만 나간다. 검수 메타(review/source)와 standardCode 는 앱 번들에 싣지 않는다 —
+ * 아이 폰으로 내려받는 데이터이므로 필요한 것만 보낸다.
+ * 학년별로 한 파일에 모은다. 한 아이는 한 학년만 보기 때문이다.
+ */
+const PUBLISH_DIR = path.join(ROOT, "apps/study-buddy/content/published");
+
+function buildPublished(files) {
+  const qs = parseAll(files).filter((q) => q.status === "verified");
+  const byGrade = new Map();
+  for (const q of qs) {
+    byGrade.set(q.grade, [...(byGrade.get(q.grade) ?? []), q]);
+  }
+
+  const out = new Map(); // 파일경로 → 내용(문자열)
+  const index = { generatedAt: new Date().toISOString().slice(0, 10), grades: [] };
+
+  for (const [grade, list] of [...byGrade.entries()].sort()) {
+    // id 순으로 고정한다. 순서가 흔들리면 --check 가 매번 다르다고 판단한다.
+    list.sort((a, b) => a.id.localeCompare(b.id));
+    const questions = list.map((q) => {
+      const p = toPublished(q);
+      const parsed = publishedQuestionSchema.safeParse(p);
+      if (!parsed.success) {
+        fail(`published 스키마 위반: ${q.id}\n  ${parsed.error.issues[0]?.message}`);
+      }
+      return parsed.data;
+    });
+    const subjects = [...new Set(questions.map((q) => q.subject))].sort();
+    const body = { grade, count: questions.length, subjects, questions };
+    out.set(path.join(PUBLISH_DIR, `${grade}.json`), JSON.stringify(body, null, 2) + "\n");
+    index.grades.push({ grade, count: questions.length, subjects, file: `${grade}.json` });
+  }
+  out.set(path.join(PUBLISH_DIR, "index.json"), JSON.stringify(index, null, 2) + "\n");
+  return { out, total: qs.length, skipped: parseAll(files).length - qs.length };
+}
+
+function cmdPublish(files, checkOnly) {
+  const { out, total, skipped } = buildPublished(files);
+
+  if (checkOnly) {
+    let stale = 0;
+    for (const [file, content] of out) {
+      // index.json 의 generatedAt 은 매번 달라지므로 비교에서 뺀다
+      const norm = (s) => s.replace(/"generatedAt": "[^"]*"/, '"generatedAt": "-"');
+      const current = fs.existsSync(file) ? fs.readFileSync(file, "utf8") : "";
+      if (norm(current) !== norm(content)) {
+        log(`  ✗ 최신 아님: ${path.relative(ROOT, file)}`);
+        stale++;
+      }
+    }
+    if (stale) {
+      log(`\n  ${stale}개 파일이 authored 와 어긋납니다. pnpm quiz publish 를 실행하세요.`);
+      return 1;
+    }
+    log("  ✅ published 가 authored 와 일치합니다.");
+    return 0;
+  }
+
+  fs.mkdirSync(PUBLISH_DIR, { recursive: true });
+  for (const [file, content] of out) fs.writeFileSync(file, content);
+
+  log(`\n발행 완료 — ${total}문제 (verified 아님 ${skipped}문제 제외)\n`);
+  for (const [file, content] of out) {
+    const rel = path.relative(ROOT, file);
+    const kb = (Buffer.byteLength(content) / 1024).toFixed(1);
+    log(`  ${rel.padEnd(48)} ${kb.padStart(6)} KB`);
+  }
+  return 0;
+}
+
 // ── 진입점 ───────────────────────────────────────────────────
 const [cmd, ...rest] = process.argv.slice(2);
 const files = rest.filter((a) => !a.startsWith("-"));
@@ -354,6 +432,9 @@ switch (cmd) {
     break;
   case "promote":
     code = cmdPromote(files, rest.includes("--apply"));
+    break;
+  case "publish":
+    code = cmdPublish(files, rest.includes("--check"));
     break;
   case "generate":
     console.error(`
