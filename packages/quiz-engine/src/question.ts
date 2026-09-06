@@ -50,6 +50,16 @@ export const reviewSchema = z.strictObject({
       note: z.string().optional(),
     })
     .nullable(),
+  /** 외부 근거(웹 검색 등)와 대조한 결과. 교차 검증이 못 잡는 사실 오류는 이것만 잡는다. */
+  factCheck: z
+    .strictObject({
+      passed: z.boolean(),
+      /** 무엇으로 확인했는지. 예: "웹 검색", "교육부 성취기준 문서" */
+      source: z.string(),
+      at: z.string(),
+      note: z.string().optional(),
+    })
+    .nullable(),
   /** 사람 검수 */
   human: z
     .strictObject({

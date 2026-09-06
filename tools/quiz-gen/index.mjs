@@ -17,6 +17,8 @@ import {
   GRADE_SHORT,
   SUBJECT_LABEL,
   runSetChecks,
+  needsFactCheck,
+  assessRisk,
 } from "@labs/quiz-engine";
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
@@ -26,9 +28,14 @@ const log = console.log;
 const usage = `
 사용: pnpm quiz <명령> [인자]
 
-  validate <파일...>   스키마 + 자동 검증 7종을 돌리고 실패 항목을 보고한다
+  validate <파일...>   스키마 + 자동 검증 7종 + 세트 검증 5종
+  risk <파일...>       근거 대조(웹 검색)가 필요한 문제를 위험도 순으로 선별
+  blind <파일>         교차 검증용 — 정답을 지운 문제 목록을 출력
+  blind-apply <파일> <답안>  교차 검증 답안(JSON: {"id":정답번호})을 대조하고 기록
   stats <파일...>      학년·과목·난이도·검수상태별 집계
   review <파일>        검수용으로 한 문제씩 사람이 읽기 좋게 출력
+  status <파일...>     검증 단계별 진행 상황 (구조/교차/근거/사람)
+  promote <파일...> [--apply]  검증을 모두 통과한 문제를 verified 로 승격
   generate             (미구현) API 키가 준비되면 여기에 붙인다
 
 예시
@@ -145,6 +152,163 @@ function cmdReview(file) {
   return 0;
 }
 
+function parseAll(files) {
+  const out = [];
+  for (const file of files)
+    for (const item of load(file).items) {
+      const p = authoredQuestionSchema.safeParse(item);
+      if (p.success) out.push(p.data);
+    }
+  return out;
+}
+
+function cmdRisk(files) {
+  const qs = parseAll(files);
+  const risky = needsFactCheck(qs);
+  const byId = new Map(qs.map((q) => [q.id, q]));
+
+  log(`\n근거 대조 대상 ${risky.length} / 전체 ${qs.length}문제\n`);
+  log("교차 검증은 정답 인덱스 오류만 잡는다. 아래는 외부 자료로 확인이 필요한 것들이다.");
+  log("이미 확인한 것(review.factCheck)은 ✓ 로 표시한다.\n");
+
+  for (const r of risky) {
+    const q = byId.get(r.id);
+    const done = q.review.factCheck ? "✓" : " ";
+    log(`${done} [${String(r.score).padStart(2)}] ${r.id}  ${q.unit}`);
+    for (const s of r.signals) {
+      log(`       ${s.label}: ${s.hits.slice(0, 5).join(", ")}`);
+    }
+  }
+  const todo = risky.filter((r) => !byId.get(r.id).review.factCheck);
+  log(`\n  확인 완료 ${risky.length - todo.length} · 남음 ${todo.length}`);
+  if (todo.length) log(`  프롬프트: tools/quiz-gen/prompts/factcheck.md`);
+  return 0;
+}
+
+function cmdBlind(file) {
+  const qs = parseAll([file]);
+  log(`# 교차 검증용 문항 ${qs.length}개 — 정답이 지워져 있다\n`);
+  log(`프롬프트: tools/quiz-gen/prompts/crosscheck.md\n`);
+  for (const q of qs) {
+    log(`${q.id} | ${q.stem}`);
+    q.choices.forEach((c, i) => log(`   ${i + 1}. ${c}`));
+    log("");
+  }
+  log(`답안을 {"${qs[0]?.id}": 1, ...} 형태 JSON 으로 저장한 뒤:`);
+  log(`  pnpm quiz blind-apply ${file} <답안.json>`);
+  return 0;
+}
+
+function cmdBlindApply(file, answerFile) {
+  const raw = JSON.parse(fs.readFileSync(answerFile, "utf8"));
+  const items = load(file).items;
+  let ok = 0;
+  const bad = [];
+  const today = new Date().toISOString().slice(0, 10);
+
+  for (const item of items) {
+    const given = raw[item.id];
+    if (given == null) continue;
+    const expected = item.answerIndex + 1;
+    const passed = given === expected;
+    if (passed) ok++;
+    else bad.push({ id: item.id, given, expected, stem: item.stem });
+    item.review = item.review ?? {};
+    item.review.crossCheck = {
+      passed,
+      model: process.env.QUIZ_MODEL ?? "claude-opus-5",
+      at: today,
+      note: passed ? "정답 일치" : `불일치: 재풀이 ${given}번 vs 표기 ${expected}번`,
+    };
+  }
+  fs.writeFileSync(file, JSON.stringify(items, null, 2) + "\n");
+
+  log(`\n교차 검증 ${ok}/${ok + bad.length} 일치`);
+  if (bad.length) {
+    log(`\n불일치 — 정답 인덱스를 다시 봐야 한다`);
+    for (const b of bad) log(`  ❌ ${b.id}  재풀이 ${b.given}번 vs 표기 ${b.expected}번\n     ${b.stem.slice(0, 50)}`);
+  } else {
+    log("  불일치 없음");
+  }
+  log(`\n  ${file} 에 기록함`);
+  return bad.length ? 1 : 0;
+}
+
+function cmdStatus(files) {
+  const qs = parseAll(files);
+  const n = qs.length;
+  const risky = new Set(needsFactCheck(qs).map((r) => r.id));
+  const count = (fn) => qs.filter(fn).length;
+  const line = (label, done, total, note = "") =>
+    log(`  ${label.padEnd(14)} ${String(done).padStart(3)}/${String(total).padEnd(4)} ${"█".repeat(Math.round((done / (total || 1)) * 20)).padEnd(20, "·")} ${note}`);
+
+  log(`\n검증 진행 상황 — ${n}문제\n`);
+  line("구조 검증", count((q) => q.review.autoChecks.length > 0), n);
+  line("교차 검증", count((q) => q.review.crossCheck), n);
+  const fcDone = qs.filter((q) => risky.has(q.id) && q.review.factCheck).length;
+  line("근거 대조", fcDone, risky.size, `위험 항목 ${risky.size}건만 대상`);
+  line("사람 검수", count((q) => q.review.human), n, "선택");
+  log("");
+  line("검수 완료", count((q) => q.status === "verified"), n, "verified 만 앱에 나간다");
+  log("");
+  return 0;
+}
+
+/**
+ * verified 승격 기준 — 이 조건을 모두 만족해야 앱에 나간다.
+ * 기준을 코드로 박아 두어야 사람이 그때그때 판단하지 않는다.
+ */
+function verdictFor(q, risky) {
+  if (q.review.autoChecks.length === 0) return "구조 검증 기록 없음";
+  if (!runAutoChecks(q).every((r) => r.passed)) return "자동 검증 실패";
+  if (!q.review.crossCheck) return "교차 검증 안 함";
+  if (!q.review.crossCheck.passed) return "교차 검증 불일치";
+  if (risky.has(q.id) && !q.review.factCheck) return "근거 대조 필요 (위험 항목)";
+  if (risky.has(q.id) && !q.review.factCheck.passed) return "근거 대조 실패";
+  return null; // 통과
+}
+
+function cmdPromote(files, apply) {
+  const qs = parseAll(files);
+  const risky = new Set(needsFactCheck(qs).map((r) => r.id));
+  const pass = [];
+  const hold = [];
+  for (const q of qs) {
+    const reason = verdictFor(q, risky);
+    if (reason) hold.push({ id: q.id, reason });
+    else pass.push(q.id);
+  }
+
+  log(`\n승격 대상 ${pass.length} / 보류 ${hold.length}\n`);
+  if (hold.length) {
+    log("보류 — 이유");
+    const byReason = new Map();
+    for (const h of hold) byReason.set(h.reason, [...(byReason.get(h.reason) ?? []), h.id]);
+    for (const [reason, ids] of byReason) log(`  ${reason}: ${ids.length}건 (${ids.slice(0, 4).join(", ")}${ids.length > 4 ? " …" : ""})`);
+    log("");
+  }
+
+  if (!apply) {
+    log("  실제로 바꾸려면 --apply 를 붙이세요.");
+    return 0;
+  }
+
+  const passSet = new Set(pass);
+  let changed = 0;
+  for (const file of files) {
+    const items = load(file).items;
+    for (const item of items) {
+      if (passSet.has(item.id) && item.status !== "verified") {
+        item.status = "verified";
+        changed++;
+      }
+    }
+    fs.writeFileSync(file, JSON.stringify(items, null, 2) + "\n");
+  }
+  log(`  ✅ ${changed}문제를 verified 로 승격`);
+  return 0;
+}
+
 // ── 진입점 ───────────────────────────────────────────────────
 const [cmd, ...rest] = process.argv.slice(2);
 const files = rest.filter((a) => !a.startsWith("-"));
@@ -168,6 +332,24 @@ switch (cmd) {
     break;
   case "review":
     code = cmdReview(files[0]);
+    break;
+  case "risk":
+    code = cmdRisk(files);
+    break;
+  case "blind":
+    code = cmdBlind(files[0]);
+    break;
+  case "blind-apply":
+    if (files.length < 2) {
+      console.error("사용: pnpm quiz blind-apply <문항파일> <답안.json>");
+      code = 1;
+    } else code = cmdBlindApply(files[0], files[1]);
+    break;
+  case "status":
+    code = cmdStatus(files);
+    break;
+  case "promote":
+    code = cmdPromote(files, rest.includes("--apply"));
     break;
   case "generate":
     console.error(`

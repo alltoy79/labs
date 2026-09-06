@@ -12,6 +12,8 @@ import {
   draftJsonSchema,
   toPublished,
   runAutoChecks,
+  assessRisk,
+  needsFactCheck,
   autoChecksPassed,
   type AuthoredQuestion,
 } from "../index.js";
@@ -38,7 +40,7 @@ function fixture(over: Partial<AuthoredQuestion> = {}): AuthoredQuestion {
     tags: ["달", "공전"],
     standardCode: null,
     status: "draft",
-    review: { autoChecks: [], crossCheck: null, human: null },
+    review: { autoChecks: [], crossCheck: null, factCheck: null, human: null },
     source: {
       model: "claude-opus-5",
       promptVersion: "v1",
@@ -180,5 +182,46 @@ describe("자동 검증", () => {
   });
   test("id 와 학년·과목 불일치를 잡는다", () => {
     failed(fixture({ id: "e5-sci-0001" }), "id-matches-grade-subject");
+  });
+});
+
+describe("근거 대조 선별", () => {
+  test("안전 주제를 높은 위험으로 본다", () => {
+    const r = assessRisk(
+      fixture({
+        unit: "연소와 소화",
+        stem: "기름에 붙은 불을 끌 때 물을 부으면 안 되는 까닭은?",
+        explanation: "물이 수증기가 되며 기름이 튀어 화재가 번집니다. 소화기를 쓰세요.",
+      }),
+    );
+    assert.ok(
+      r.signals.some((s) => s.kind === "safety"),
+      "안전 신호를 잡지 못함",
+    );
+    assert.ok(r.score >= 3, `위험도가 낮게 나옴: ${r.score}`);
+  });
+
+  test("수치를 신호로 잡는다", () => {
+    const r = assessRisk(fixture({ explanation: "달의 공전 주기는 약 30일입니다. 그래서 약 30일마다 반복됩니다." }));
+    assert.ok(r.signals.some((s) => s.kind === "number"), "수치 신호를 잡지 못함");
+  });
+
+  test("위험 신호가 없으면 선별에서 빠진다", () => {
+    const plain = fixture({
+      unit: "식물의 구조와 기능",
+      stem: "식물의 뿌리가 하는 일이 아닌 것은?",
+      choices: ["물을 흡수한다", "몸을 지지한다", "양분을 저장한다", "빛을 만든다"],
+      answerIndex: 3,
+      explanation: "빛을 만드는 일은 뿌리가 하지 않습니다.",
+      choiceExplanations: ["뿌리는 물을 빨아들입니다.", "뿌리는 몸을 고정합니다.", "저장하는 뿌리도 있습니다.", "맞습니다. 빛을 만들지 않습니다."],
+    });
+    assert.equal(needsFactCheck([plain]).length, 0);
+  });
+
+  test("위험도 순으로 정렬한다", () => {
+    const risky = fixture({ id: "e6-sci-0002", stem: "전기 화재가 났을 때 안전한 대처는?", explanation: "감전 위험이 있으니 물을 쓰지 않습니다. 반드시 차단기를 내립니다." });
+    const mild = fixture({ id: "e6-sci-0003", explanation: "약 30일마다 반복됩니다." });
+    const out = needsFactCheck([mild, risky], 1);
+    assert.equal(out[0]?.id, "e6-sci-0002", "안전 주제가 먼저 와야 함");
   });
 });

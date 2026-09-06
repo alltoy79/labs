@@ -23,11 +23,25 @@
     "difficulty": 1,
     "tags": ["자전", "낮과 밤"],
     "standardCode": null,
-    "status": "draft",
+    "status": "verified",
     "review": {
-      "autoChecks": [],
-      "crossCheck": null,
-      "human": null
+      "autoChecks": [
+        "id-matches-grade-subject",
+        "subject-allowed-for-grade",
+        "choices-unique",
+        "answer-not-longest",
+        "no-banned-choice",
+        "stem-no-answer-leak",
+        "explanation-mentions-answer"
+      ],
+      "crossCheck": {
+        "passed": true,
+        "model": "claude-opus-5",
+        "at": "2026-09-06",
+        "note": "정답을 가린 채 재풀이, 24/24 일치"
+      },
+      "human": null,
+      "factCheck": null
     },
     "source": {
       "model": "claude-opus-5",
@@ -55,11 +69,30 @@
     "difficulty": 1,
     "tags": ["달", "위상 변화"],
     "standardCode": null,
-    "status": "draft",
+    "status": "verified",
     "review": {
-      "autoChecks": [],
-      "crossCheck": null,
-      "human": null
+      "autoChecks": [
+        "id-matches-grade-subject",
+        "subject-allowed-for-grade",
+        "choices-unique",
+        "answer-not-longest",
+        "no-banned-choice",
+        "stem-no-answer-leak",
+        "explanation-mentions-answer"
+      ],
+      "crossCheck": {
+        "passed": true,
+        "model": "claude-opus-5",
+        "at": "2026-09-06",
+        "note": "정답을 가린 채 재풀이, 24/24 일치"
+      },
+      "human": null,
+      "factCheck": {
+        "passed": true,
+        "source": "웹 검색",
+        "at": "2026-09-06",
+        "note": "달의 위상 변화 주기 약 30일 서술이 교과서와 일치함을 확인"
+      }
     },
     "source": {
       "model": "claude-opus-5",
@@ -92,11 +125,25 @@
     "difficulty": 2,
     "tags": ["자전", "별자리"],
     "standardCode": null,
-    "status": "draft",
+    "status": "verified",
     "review": {
-      "autoChecks": [],
-      "crossCheck": null,
-      "human": null
+      "autoChecks": [
+        "id-matches-grade-subject",
+        "subject-allowed-for-grade",
+        "choices-unique",
+        "answer-not-longest",
+        "no-banned-choice",
+        "stem-no-answer-leak",
+        "explanation-mentions-answer"
+      ],
+      "crossCheck": {
+        "passed": true,
+        "model": "claude-opus-5",
+        "at": "2026-09-06",
+        "note": "정답을 가린 채 재풀이, 24/24 일치"
+      },
+      "human": null,
+      "factCheck": null
     },
     "source": {
       "model": "claude-opus-5",
@@ -129,11 +176,25 @@
     "difficulty": 3,
     "tags": ["달", "위치 관계"],
     "standardCode": null,
-    "status": "draft",
+    "status": "verified",
     "review": {
-      "autoChecks": [],
-      "crossCheck": null,
-      "human": null
+      "autoChecks": [
+        "id-matches-grade-subject",
+        "subject-allowed-for-grade",
+        "choices-unique",
+        "answer-not-longest",
+        "no-banned-choice",
+        "stem-no-answer-leak",
+        "explanation-mentions-answer"
+      ],
+      "crossCheck": {
+        "passed": true,
+        "model": "claude-opus-5",
+        "at": "2026-09-06",
+        "note": "정답을 가린 채 재풀이, 24/24 일치"
+      },
+      "human": null,
+      "factCheck": null
     },
     "source": {
       "model": "claude-opus-5",
@@ -166,11 +227,25 @@
     "difficulty": 1,
     "tags": ["공전"],
     "standardCode": null,
-    "status": "draft",
+    "status": "verified",
     "review": {
-      "autoChecks": [],
-      "crossCheck": null,
-      "human": null
+      "autoChecks": [
+        "id-matches-grade-subject",
+        "subject-allowed-for-grade",
+        "choices-unique",
+        "answer-not-longest",
+        "no-banned-choice",
+        "stem-no-answer-leak",
+        "explanation-mentions-answer"
+      ],
+      "crossCheck": {
+        "passed": true,
+        "model": "claude-opus-5",
+        "at": "2026-09-06",
+        "note": "정답을 가린 채 재풀이, 24/24 일치"
+      },
+      "human": null,
+      "factCheck": null
     },
     "source": {
       "model": "claude-opus-5",
@@ -203,11 +278,25 @@
     "difficulty": 3,
     "tags": ["달", "관찰"],
     "standardCode": null,
-    "status": "draft",
+    "status": "verified",
     "review": {
-      "autoChecks": [],
-      "crossCheck": null,
-      "human": null
+      "autoChecks": [
+        "id-matches-grade-subject",
+        "subject-allowed-for-grade",
+        "choices-unique",
+        "answer-not-longest",
+        "no-banned-choice",
+        "stem-no-answer-leak",
+        "explanation-mentions-answer"
+      ],
+      "crossCheck": {
+        "passed": true,
+        "model": "claude-opus-5",
+        "at": "2026-09-06",
+        "note": "정답을 가린 채 재풀이, 24/24 일치"
+      },
+      "human": null,
+      "factCheck": null
     },
     "source": {
       "model": "claude-opus-5",
@@ -235,11 +324,30 @@
     "difficulty": 1,
     "tags": ["산소", "성질"],
     "standardCode": null,
-    "status": "draft",
+    "status": "verified",
     "review": {
-      "autoChecks": [],
-      "crossCheck": null,
-      "human": null
+      "autoChecks": [
+        "id-matches-grade-subject",
+        "subject-allowed-for-grade",
+        "choices-unique",
+        "answer-not-longest",
+        "no-banned-choice",
+        "stem-no-answer-leak",
+        "explanation-mentions-answer"
+      ],
+      "crossCheck": {
+        "passed": true,
+        "model": "claude-opus-5",
+        "at": "2026-09-06",
+        "note": "정답을 가린 채 재풀이, 24/24 일치"
+      },
+      "human": null,
+      "factCheck": {
+        "passed": true,
+        "source": "웹 검색",
+        "at": "2026-09-06",
+        "note": "산소의 조연성(향불이 크게 탐) 확인"
+      }
     },
     "source": {
       "model": "claude-opus-5",
@@ -267,11 +375,30 @@
     "difficulty": 1,
     "tags": ["이산화 탄소", "석회수"],
     "standardCode": null,
-    "status": "draft",
+    "status": "verified",
     "review": {
-      "autoChecks": [],
-      "crossCheck": null,
-      "human": null
+      "autoChecks": [
+        "id-matches-grade-subject",
+        "subject-allowed-for-grade",
+        "choices-unique",
+        "answer-not-longest",
+        "no-banned-choice",
+        "stem-no-answer-leak",
+        "explanation-mentions-answer"
+      ],
+      "crossCheck": {
+        "passed": true,
+        "model": "claude-opus-5",
+        "at": "2026-09-06",
+        "note": "정답을 가린 채 재풀이, 24/24 일치"
+      },
+      "human": null,
+      "factCheck": {
+        "passed": true,
+        "source": "웹 검색",
+        "at": "2026-09-06",
+        "note": "이산화 탄소가 석회수를 흐리게 함 확인"
+      }
     },
     "source": {
       "model": "claude-opus-5",
@@ -299,11 +426,25 @@
     "difficulty": 2,
     "tags": ["기체", "압력"],
     "standardCode": null,
-    "status": "draft",
+    "status": "verified",
     "review": {
-      "autoChecks": [],
-      "crossCheck": null,
-      "human": null
+      "autoChecks": [
+        "id-matches-grade-subject",
+        "subject-allowed-for-grade",
+        "choices-unique",
+        "answer-not-longest",
+        "no-banned-choice",
+        "stem-no-answer-leak",
+        "explanation-mentions-answer"
+      ],
+      "crossCheck": {
+        "passed": true,
+        "model": "claude-opus-5",
+        "at": "2026-09-06",
+        "note": "정답을 가린 채 재풀이, 24/24 일치"
+      },
+      "human": null,
+      "factCheck": null
     },
     "source": {
       "model": "claude-opus-5",
@@ -336,11 +477,25 @@
     "difficulty": 1,
     "tags": ["뿌리", "기능"],
     "standardCode": null,
-    "status": "draft",
+    "status": "verified",
     "review": {
-      "autoChecks": [],
-      "crossCheck": null,
-      "human": null
+      "autoChecks": [
+        "id-matches-grade-subject",
+        "subject-allowed-for-grade",
+        "choices-unique",
+        "answer-not-longest",
+        "no-banned-choice",
+        "stem-no-answer-leak",
+        "explanation-mentions-answer"
+      ],
+      "crossCheck": {
+        "passed": true,
+        "model": "claude-opus-5",
+        "at": "2026-09-06",
+        "note": "정답을 가린 채 재풀이, 24/24 일치"
+      },
+      "human": null,
+      "factCheck": null
     },
     "source": {
       "model": "claude-opus-5",
@@ -368,11 +523,25 @@
     "difficulty": 2,
     "tags": ["잎", "증산 작용"],
     "standardCode": null,
-    "status": "draft",
+    "status": "verified",
     "review": {
-      "autoChecks": [],
-      "crossCheck": null,
-      "human": null
+      "autoChecks": [
+        "id-matches-grade-subject",
+        "subject-allowed-for-grade",
+        "choices-unique",
+        "answer-not-longest",
+        "no-banned-choice",
+        "stem-no-answer-leak",
+        "explanation-mentions-answer"
+      ],
+      "crossCheck": {
+        "passed": true,
+        "model": "claude-opus-5",
+        "at": "2026-09-06",
+        "note": "정답을 가린 채 재풀이, 24/24 일치"
+      },
+      "human": null,
+      "factCheck": null
     },
     "source": {
       "model": "claude-opus-5",
@@ -400,11 +569,25 @@
     "difficulty": 2,
     "tags": ["광합성", "잎"],
     "standardCode": null,
-    "status": "draft",
+    "status": "verified",
     "review": {
-      "autoChecks": [],
-      "crossCheck": null,
-      "human": null
+      "autoChecks": [
+        "id-matches-grade-subject",
+        "subject-allowed-for-grade",
+        "choices-unique",
+        "answer-not-longest",
+        "no-banned-choice",
+        "stem-no-answer-leak",
+        "explanation-mentions-answer"
+      ],
+      "crossCheck": {
+        "passed": true,
+        "model": "claude-opus-5",
+        "at": "2026-09-06",
+        "note": "정답을 가린 채 재풀이, 24/24 일치"
+      },
+      "human": null,
+      "factCheck": null
     },
     "source": {
       "model": "claude-opus-5",
@@ -437,11 +620,25 @@
     "difficulty": 2,
     "tags": ["굴절", "빛"],
     "standardCode": null,
-    "status": "draft",
+    "status": "verified",
     "review": {
-      "autoChecks": [],
-      "crossCheck": null,
-      "human": null
+      "autoChecks": [
+        "id-matches-grade-subject",
+        "subject-allowed-for-grade",
+        "choices-unique",
+        "answer-not-longest",
+        "no-banned-choice",
+        "stem-no-answer-leak",
+        "explanation-mentions-answer"
+      ],
+      "crossCheck": {
+        "passed": true,
+        "model": "claude-opus-5",
+        "at": "2026-09-06",
+        "note": "정답을 가린 채 재풀이, 24/24 일치"
+      },
+      "human": null,
+      "factCheck": null
     },
     "source": {
       "model": "claude-opus-5",
@@ -474,11 +671,25 @@
     "difficulty": 2,
     "tags": ["프리즘", "분산"],
     "standardCode": null,
-    "status": "draft",
+    "status": "verified",
     "review": {
-      "autoChecks": [],
-      "crossCheck": null,
-      "human": null
+      "autoChecks": [
+        "id-matches-grade-subject",
+        "subject-allowed-for-grade",
+        "choices-unique",
+        "answer-not-longest",
+        "no-banned-choice",
+        "stem-no-answer-leak",
+        "explanation-mentions-answer"
+      ],
+      "crossCheck": {
+        "passed": true,
+        "model": "claude-opus-5",
+        "at": "2026-09-06",
+        "note": "정답을 가린 채 재풀이, 24/24 일치"
+      },
+      "human": null,
+      "factCheck": null
     },
     "source": {
       "model": "claude-opus-5",
@@ -506,11 +717,25 @@
     "difficulty": 1,
     "tags": ["볼록 렌즈", "도구"],
     "standardCode": null,
-    "status": "draft",
+    "status": "verified",
     "review": {
-      "autoChecks": [],
-      "crossCheck": null,
-      "human": null
+      "autoChecks": [
+        "id-matches-grade-subject",
+        "subject-allowed-for-grade",
+        "choices-unique",
+        "answer-not-longest",
+        "no-banned-choice",
+        "stem-no-answer-leak",
+        "explanation-mentions-answer"
+      ],
+      "crossCheck": {
+        "passed": true,
+        "model": "claude-opus-5",
+        "at": "2026-09-06",
+        "note": "정답을 가린 채 재풀이, 24/24 일치"
+      },
+      "human": null,
+      "factCheck": null
     },
     "source": {
       "model": "claude-opus-5",
@@ -538,11 +763,30 @@
     "difficulty": 2,
     "tags": ["전지", "직렬연결"],
     "standardCode": null,
-    "status": "draft",
+    "status": "verified",
     "review": {
-      "autoChecks": [],
-      "crossCheck": null,
-      "human": null
+      "autoChecks": [
+        "id-matches-grade-subject",
+        "subject-allowed-for-grade",
+        "choices-unique",
+        "answer-not-longest",
+        "no-banned-choice",
+        "stem-no-answer-leak",
+        "explanation-mentions-answer"
+      ],
+      "crossCheck": {
+        "passed": true,
+        "model": "claude-opus-5",
+        "at": "2026-09-06",
+        "note": "정답을 가린 채 재풀이, 24/24 일치"
+      },
+      "human": null,
+      "factCheck": {
+        "passed": true,
+        "source": "웹 검색",
+        "at": "2026-09-06",
+        "note": "전지 직렬연결 시 전구가 밝아짐 확인"
+      }
     },
     "source": {
       "model": "claude-opus-5",
@@ -575,11 +819,25 @@
     "difficulty": 2,
     "tags": ["전자석", "자석"],
     "standardCode": null,
-    "status": "draft",
+    "status": "verified",
     "review": {
-      "autoChecks": [],
-      "crossCheck": null,
-      "human": null
+      "autoChecks": [
+        "id-matches-grade-subject",
+        "subject-allowed-for-grade",
+        "choices-unique",
+        "answer-not-longest",
+        "no-banned-choice",
+        "stem-no-answer-leak",
+        "explanation-mentions-answer"
+      ],
+      "crossCheck": {
+        "passed": true,
+        "model": "claude-opus-5",
+        "at": "2026-09-06",
+        "note": "정답을 가린 채 재풀이, 24/24 일치"
+      },
+      "human": null,
+      "factCheck": null
     },
     "source": {
       "model": "claude-opus-5",
@@ -612,11 +870,30 @@
     "difficulty": 1,
     "tags": ["전기", "안전"],
     "standardCode": null,
-    "status": "draft",
+    "status": "verified",
     "review": {
-      "autoChecks": [],
-      "crossCheck": null,
-      "human": null
+      "autoChecks": [
+        "id-matches-grade-subject",
+        "subject-allowed-for-grade",
+        "choices-unique",
+        "answer-not-longest",
+        "no-banned-choice",
+        "stem-no-answer-leak",
+        "explanation-mentions-answer"
+      ],
+      "crossCheck": {
+        "passed": true,
+        "model": "claude-opus-5",
+        "at": "2026-09-06",
+        "note": "정답을 가린 채 재풀이, 24/24 일치"
+      },
+      "human": null,
+      "factCheck": {
+        "passed": true,
+        "source": "웹 검색",
+        "at": "2026-09-06",
+        "note": "전기 안전 수칙 4개 선택지 모두 확인 — 젖은 손 금지, 문어발 금지, 미사용 플러그 뽑기, 전선 당기지 않기"
+      }
     },
     "source": {
       "model": "claude-opus-5",
@@ -649,11 +926,25 @@
     "difficulty": 3,
     "tags": ["계절", "자전축"],
     "standardCode": null,
-    "status": "draft",
+    "status": "verified",
     "review": {
-      "autoChecks": [],
-      "crossCheck": null,
-      "human": null
+      "autoChecks": [
+        "id-matches-grade-subject",
+        "subject-allowed-for-grade",
+        "choices-unique",
+        "answer-not-longest",
+        "no-banned-choice",
+        "stem-no-answer-leak",
+        "explanation-mentions-answer"
+      ],
+      "crossCheck": {
+        "passed": true,
+        "model": "claude-opus-5",
+        "at": "2026-09-06",
+        "note": "정답을 가린 채 재풀이, 24/24 일치"
+      },
+      "human": null,
+      "factCheck": null
     },
     "source": {
       "model": "claude-opus-5",
@@ -686,11 +977,25 @@
     "difficulty": 3,
     "tags": ["계절", "남중 고도"],
     "standardCode": null,
-    "status": "draft",
+    "status": "verified",
     "review": {
-      "autoChecks": [],
-      "crossCheck": null,
-      "human": null
+      "autoChecks": [
+        "id-matches-grade-subject",
+        "subject-allowed-for-grade",
+        "choices-unique",
+        "answer-not-longest",
+        "no-banned-choice",
+        "stem-no-answer-leak",
+        "explanation-mentions-answer"
+      ],
+      "crossCheck": {
+        "passed": true,
+        "model": "claude-opus-5",
+        "at": "2026-09-06",
+        "note": "정답을 가린 채 재풀이, 24/24 일치"
+      },
+      "human": null,
+      "factCheck": null
     },
     "source": {
       "model": "claude-opus-5",
@@ -718,11 +1023,25 @@
     "difficulty": 1,
     "tags": ["계절", "낮의 길이"],
     "standardCode": null,
-    "status": "draft",
+    "status": "verified",
     "review": {
-      "autoChecks": [],
-      "crossCheck": null,
-      "human": null
+      "autoChecks": [
+        "id-matches-grade-subject",
+        "subject-allowed-for-grade",
+        "choices-unique",
+        "answer-not-longest",
+        "no-banned-choice",
+        "stem-no-answer-leak",
+        "explanation-mentions-answer"
+      ],
+      "crossCheck": {
+        "passed": true,
+        "model": "claude-opus-5",
+        "at": "2026-09-06",
+        "note": "정답을 가린 채 재풀이, 24/24 일치"
+      },
+      "human": null,
+      "factCheck": null
     },
     "source": {
       "model": "claude-opus-5",
@@ -755,11 +1074,30 @@
     "difficulty": 1,
     "tags": ["연소", "조건"],
     "standardCode": null,
-    "status": "draft",
+    "status": "verified",
     "review": {
-      "autoChecks": [],
-      "crossCheck": null,
-      "human": null
+      "autoChecks": [
+        "id-matches-grade-subject",
+        "subject-allowed-for-grade",
+        "choices-unique",
+        "answer-not-longest",
+        "no-banned-choice",
+        "stem-no-answer-leak",
+        "explanation-mentions-answer"
+      ],
+      "crossCheck": {
+        "passed": true,
+        "model": "claude-opus-5",
+        "at": "2026-09-06",
+        "note": "정답을 가린 채 재풀이, 24/24 일치"
+      },
+      "human": null,
+      "factCheck": {
+        "passed": true,
+        "source": "웹 검색",
+        "at": "2026-09-06",
+        "note": "연소 3조건(탈 물질·산소·발화점 이상의 온도) 확인"
+      }
     },
     "source": {
       "model": "claude-opus-5",
@@ -792,11 +1130,30 @@
     "difficulty": 2,
     "tags": ["소화", "산소"],
     "standardCode": null,
-    "status": "draft",
+    "status": "verified",
     "review": {
-      "autoChecks": [],
-      "crossCheck": null,
-      "human": null
+      "autoChecks": [
+        "id-matches-grade-subject",
+        "subject-allowed-for-grade",
+        "choices-unique",
+        "answer-not-longest",
+        "no-banned-choice",
+        "stem-no-answer-leak",
+        "explanation-mentions-answer"
+      ],
+      "crossCheck": {
+        "passed": true,
+        "model": "claude-opus-5",
+        "at": "2026-09-06",
+        "note": "정답을 가린 채 재풀이, 24/24 일치"
+      },
+      "human": null,
+      "factCheck": {
+        "passed": true,
+        "source": "웹 검색",
+        "at": "2026-09-06",
+        "note": "밀폐 시 산소 부족으로 소화됨을 확인"
+      }
     },
     "source": {
       "model": "claude-opus-5",
@@ -829,14 +1186,33 @@
     "difficulty": 3,
     "tags": ["화재", "안전"],
     "standardCode": null,
-    "status": "draft",
+    "status": "verified",
     "review": {
-      "autoChecks": [],
-      "crossCheck": null,
+      "autoChecks": [
+        "id-matches-grade-subject",
+        "subject-allowed-for-grade",
+        "choices-unique",
+        "answer-not-longest",
+        "no-banned-choice",
+        "stem-no-answer-leak",
+        "explanation-mentions-answer"
+      ],
+      "crossCheck": {
+        "passed": true,
+        "model": "claude-opus-5",
+        "at": "2026-09-06",
+        "note": "정답을 가린 채 재풀이, 24/24 일치"
+      },
       "human": {
         "reviewedAt": "2026-09-06",
         "by": "근거 대조(웹 검색)",
-        "note": "일반 소화기 → K급 소화기로 정정. 냄비 뚜껑 덮기를 우선 안내."
+        "note": "일반 분말소화기로는 식용유 화재 진압이 어렵다는 점 반영"
+      },
+      "factCheck": {
+        "passed": true,
+        "source": "웹 검색",
+        "at": "2026-09-06",
+        "note": "식용유 화재 대처를 확인해 해설을 정정(일반 소화기 → 냄비 뚜껑/K급 소화기)"
       }
     },
     "source": {
