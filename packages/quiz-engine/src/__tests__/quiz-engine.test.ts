@@ -16,6 +16,8 @@ import {
   needsFactCheck,
   makePassageId,
   runSetChecks,
+  groupByPassage,
+  filterGroupAware,
   autoChecksPassed,
   type AuthoredQuestion,
 } from "../index.js";
@@ -275,5 +277,39 @@ describe("국어 파일럿에서 나온 오탐 (회귀)", () => {
     assert.equal(makePassageId(p), makePassageId("  종이컵은 편리하지만  한 번 쓰고 버려진다.  "));
     assert.notEqual(makePassageId(p), makePassageId("다른 지문입니다."));
     assert.equal(makePassageId(null), null);
+  });
+});
+
+describe("지문 묶음 필터", () => {
+  const P = "도시의 밤은 좀처럼 어두워지지 않는다. 가로등과 간판이 밤새 빛을 내기 때문이다.";
+  const pid = makePassageId(P);
+  const set = () => [
+    fixture({ id: "e6-kor-0001", passage: null, passageId: null, difficulty: 1 }),
+    fixture({ id: "e6-kor-0002", passage: P, passageId: pid, difficulty: 2, stem: "중심 내용은?" }),
+    fixture({ id: "e6-kor-0003", passage: P, passageId: pid, difficulty: 3, stem: "글쓴이 의도는?" }),
+    fixture({ id: "e6-kor-0004", passage: null, passageId: null, difficulty: 2 }),
+  ];
+
+  test("묶음의 한 문제가 걸러지면 묶음 전체가 빠진다", () => {
+    const out = filterGroupAware(set(), (q) => q.id !== "e6-kor-0002");
+    const ids = out.map((q) => q.id);
+    assert.deepEqual(ids, ["e6-kor-0001", "e6-kor-0004"], "묶음 일부만 남았다: " + ids.join(","));
+  });
+
+  test("묶음이 모두 통과하면 함께 남고 순서가 붙어 있다", () => {
+    const out = filterGroupAware(set(), () => true).map((q) => q.id);
+    assert.deepEqual(out, ["e6-kor-0001", "e6-kor-0002", "e6-kor-0003", "e6-kor-0004"]);
+  });
+
+  test("난이도가 섞인 묶음은 난이도 필터에서 통째로 빠진다 (알려진 부수효과)", () => {
+    const only2 = filterGroupAware(set(), (q) => q.difficulty === 2).map((q) => q.id);
+    // 0002 는 난이도 2 지만 같은 지문의 0003 이 3 이라 함께 빠진다
+    assert.deepEqual(only2, ["e6-kor-0004"]);
+  });
+
+  test("지문 없는 문제는 각각 독립 묶음", () => {
+    const groups = groupByPassage(set());
+    assert.equal(groups.length, 3, "묶음 수가 다르다");
+    assert.equal(groups.filter((g) => g.questions.length > 1).length, 1);
   });
 });
